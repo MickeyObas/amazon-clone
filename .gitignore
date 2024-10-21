@@ -1,0 +1,8 @@
+# Ignore node_modules and Python environments
+frontend/node_modules/
+backend/__pycache__/
+backend/env/
+backend/.venv/
+myenv
+frontend/dist/
+brainstorm.txt
