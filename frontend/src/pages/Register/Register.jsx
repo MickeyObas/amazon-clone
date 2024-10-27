@@ -1,10 +1,13 @@
 import { useState, useEffect, useRef} from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import amazonLogo from '../../assets/images/amazon1.png';
 import exclamationMark from '../../assets/images/exclamation3.png';
 import checkMark from '../../assets/images/check.png';
 
 export default function Register(){
+
+    const naviagte = useNavigate();
 
     const nameInputRef = useRef(null);
     const emailorNumberInputRef = useRef(null);
@@ -68,6 +71,11 @@ export default function Register(){
         setConfirmPasswordValid(validateConfirmPassword(value));
     }
 
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        naviagte('/login');
+    }
+
     const handleFocus = (field) => {
         setIsFocused((prev) => ({...prev, [field]: true}));
     }
@@ -91,7 +99,7 @@ export default function Register(){
     return (
         <div className='flex flex-col items-center content-center min-h-screen pt-4 pb-6 bg-white'>
             <img src={amazonLogo} alt="" className='w-32 mb-5'/>
-            <form className='border border-gray-300 p-4 rounded-lg w-[350px] mb-6'>
+            <form method='post' className='border border-gray-300 p-4 rounded-lg w-[350px] mb-6' autoComplete='off'>
                 <h2 className='text-2xl font-semibold mb-3'>Create Account</h2>
                 <div className='mb-3'>
                     <label htmlFor="name" className='text-sm font-semibold block mb-1'>Your Name</label>
@@ -178,7 +186,10 @@ export default function Register(){
                         </div>
                     )}
                 </div>
-                <button className='border rounded-md text-center w-full font-semibold text-sm bg-[#FFD814] py-1 mb-5 hover:bg-[#e6c314]'>Continue</button>
+                <button 
+                className='border rounded-md text-center w-full font-semibold text-sm bg-[#FFD814] py-1 mb-5 hover:bg-[#e6c314]'
+                onClick={handleFormSubmit}
+                >Continue</button>
                 <p className='text-[13px]'>By creating an account, you agree to Amazon's <a href='' className='text-blue-800 underline'>Conditions of Use</a> and <a href='' className='text-blue-800 underline'>Privacy Notice</a>.</p>
                 <hr className='block mt-4 mb-4 h-0.5 border-t-[#e7e7e7]' />
                 <p className='text-sm font-semibold'>Buying for work?</p>

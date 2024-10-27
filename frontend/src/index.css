@@ -35,3 +35,22 @@
 body, .fancy-line:after {
   background: white;
 }
+
+.separator {
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+}
+
+.divider::before, .divider::after {
+  flex: 1;
+  content: '';
+  padding: 0.05px;
+  background-color: lightgray;
+  margin: 5px;
+}
