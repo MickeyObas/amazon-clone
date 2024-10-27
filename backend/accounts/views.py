@@ -1,3 +1,23 @@
-from django.shortcuts import render
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
-# Create your views here.
+from .models import CustomUser
+from .serializers import UserSerializer
+
+
+@api_view(['GET'])
+def users_list(request):
+    users = CustomUser.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def user_detail(request, pk):
+    try:
+        user = CustomUser.objects.get(id=pk)
+    except CustomUser.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
