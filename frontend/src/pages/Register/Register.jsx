@@ -102,7 +102,7 @@ export default function Register(){
                         value={name}
                         onChange={handleNameChange}
                         placeholder='First and last name'
-                        className={`border focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none ${nameValid ? 'border-gray-500 focus:ring-[#cee8ff] focus:ring-opacity-50' : isFocused.name &&'border-red-500 border-[2px] focus:ring-0'} `}
+                        className={`border focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none ${nameValid ? 'border-gray-500 focus:ring-[#cee8ff] focus:ring-opacity-50' : isFocused.name &&'border-red-500 border-[2px] focus:ring-0 focus:outline-none'} `}
                         ref={nameInputRef}
                         onFocus={() => handleFocus('name')}
                         onBlur={() => nameValid ? handleBlur('name') : null}
