@@ -102,7 +102,7 @@ export default function Register(){
                         value={name}
                         onChange={handleNameChange}
                         placeholder='First and last name'
-                        className={`border focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none ${nameValid ? 'border-gray-500 focus:ring-[#cee8ff] focus:ring-opacity-50' : isFocused.name &&'border-red-500 border-[2px] focus:ring-0 focus:outline-none'} `}
+                        className={`border border-gray-500 focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none focus:ring-[#cee8ff] focus:ring-opacity-50 ${(!nameValid && isFocused.name) &&'border-red-500 border-[2px] focus:ring-0 focus:outline-none'} `}
                         ref={nameInputRef}
                         onFocus={() => handleFocus('name')}
                         onBlur={() => nameValid ? handleBlur('name') : null}
@@ -123,7 +123,7 @@ export default function Register(){
                         id="mobile-no-or-email"
                         value={mobileNumberOrEmail}
                         onChange={handleMobileNumberOrEmailChange} 
-                        className={`border focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none ${(mobileNumberOrEmailValid) ? 'border-gray-500 focus:ring-[#cee8ff] focus:ring-opacity-50' : isFocused.mobileOrEmail && 'border-red-500 border-[2px] focus:ring-0'} `}
+                        className={`border border-gray-500 focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none focus:ring-[#cee8ff] focus:ring-opacity-50 ${(!mobileNumberOrEmailValid && isFocused.mobileOrEmail) &&'border-red-500 border-[2px] focus:ring-0 focus:outline-none'} `}
                         ref={emailorNumberInputRef}
                         onFocus={() => handleFocus('mobileOrEmail')}
                         onBlur={() => mobileNumberOrEmailValid ?  handleBlur('mobileOrEmail') : null}
@@ -145,7 +145,7 @@ export default function Register(){
                         value={password}
                         onChange={handlePasswordChange}
                         placeholder='At least 6 characters' 
-                        className={`border focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none ${passwordValid ? 'border-gray-500 focus:ring-[#cee8ff] focus:ring-opacity-50' : isFocused.password && 'border-red-500 border-[2px] focus:ring-0'} `}
+                        className={`border border-gray-500 focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none focus:ring-[#cee8ff] focus:ring-opacity-50 ${(!passwordValid && isFocused.password) &&'border-red-500 border-[2px] focus:ring-0 focus:outline-none'} `}
                         ref={passwordInputRef}
                         onFocus={() => handleFocus('password')}
                         onBlur={() => passwordValid ? handleBlur('password') : null}
@@ -166,7 +166,7 @@ export default function Register(){
                         id="password-confirm" 
                         value={password2}
                         onChange={handlePassword2Change}
-                        className={`border focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none ${confirmPasswordValid ? 'border-gray-500 focus:ring-[#cee8ff] focus:ring-opacity-50' : isFocused.password2 && 'border-red-500 border-[2px] focus:ring-0'} `}
+                        className={`border border-gray-500 focus:ring-4 rounded-[4px] w-full px-2 py-1 text-sm focus:outline-none focus:ring-[#cee8ff] focus:ring-opacity-50 ${(!confirmPasswordValid && isFocused.password2) &&'border-red-500 border-[2px] focus:ring-0 focus:outline-none'} `}
                         ref={confirmPasswordInputRef}
                         onFocus={() => handleFocus('password2')}
                         onBlur={() => confirmPasswordValid ? handleBlur('password2') : null}
