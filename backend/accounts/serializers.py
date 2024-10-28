@@ -18,13 +18,16 @@ class UserSerializer(serializers.ModelSerializer):
         email_pattern = r'^[\w\.-]+@[a-zA-Z\d\.-]+\.[a-zA-Z]{2,6}$'
         phone_pattern = r'^\+?\d{10,15}$'
 
-        self.email = None
-        self.phone_number = None
-
         if re.match(email_pattern, value):
+            if CustomUser.objects.filter(email=value).exists():
+                raise serializers.ValidationError("User with this email already exists")
             self.email = value
+            self.phone_number = None
         elif re.match(phone_pattern, value):
+            if CustomUser.objects.filter(phone_number=value).exists():
+                raise serializers.ValidationError("User with this phone number already exists")
             self.phone_number = value
+            self.email = None
         else:
             return serializers.ValidationError("Enter a valid email address or phone number")
 
@@ -37,12 +40,12 @@ class UserSerializer(serializers.ModelSerializer):
 
         validated_data['first_name'] = self.first_name      
         validated_data['last_name'] = self.last_name
-        validated_data['email'] = self.email 
-        validated_data['phone_number'] = self.phone_number     
+        validated_data['email'] = self.email if hasattr(self, 'email') else None
+        validated_data['phone_number'] = self.phone_number if hasattr(self, 'phone_number') else None   
 
         user = CustomUser.objects.create_user(
-            email=validated_data.get('email', None),
-            phone_number=validated_data.get('phone_number', None),
+            email=validated_data['email'],
+            phone_number=validated_data['phone_number'],
             password=validated_data['password'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name']
@@ -51,11 +54,23 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'password', 'name', 'email', 'mobile_no_or_email', 'phone_number', 'first_name', 'last_name']
+
+        fields = [
+            'id', 
+            'password', 
+            'name', 
+            'email',
+            'mobile_no_or_email', 
+            'phone_number', 
+            'first_name', 
+            'last_name'
+            ]
+        
         extra_kwargs = {
             'password': {'write_only': True},
-            'mobile_no_or_email': {'write_only': True},
             'first_name': {'read_only': True},
             'last_name': {'read_only': True},
             'email': {'read_only': True},
             }
+        
+
