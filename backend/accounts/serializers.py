@@ -35,7 +35,6 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data.pop('name')
         validated_data.pop('mobile_no_or_email')
 
-
         validated_data['first_name'] = self.first_name      
         validated_data['last_name'] = self.last_name
         validated_data['email'] = self.email 
