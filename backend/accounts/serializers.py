@@ -29,7 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
             self.phone_number = value
             self.email = None
         else:
-            return serializers.ValidationError("Enter a valid email address or phone number")
+            raise serializers.ValidationError("Enter a valid email address or phone number")
 
         return value
 
