@@ -45,11 +45,13 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'api.apps.ApiConfig',
     'categories.apps.CategoriesConfig',
-    'products.apps.ProductsConfig'
+    'products.apps.ProductsConfig',
     # External Apps
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,6 +80,10 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'backend.wsgi.application'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+]
 
 
 # Database
