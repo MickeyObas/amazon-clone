@@ -35,7 +35,7 @@ export default function Login(){
             if(response.ok){
                 const data = await response.json();
                 alert(`Congratulations ${data.user.first_name}, you are now signed in!`);
-                navigate('/home');
+                navigate('/');
             }
         }catch(err){
             console.log(err);

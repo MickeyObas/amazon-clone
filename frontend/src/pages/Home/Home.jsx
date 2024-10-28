@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 
 import AmazonLogo from '../../assets/images/amazon-white.png';
 import locationIcon from '../../assets/images/location2.png';
@@ -6,6 +6,9 @@ import usaIcon from '../../assets/images/united-states.png';
 import downIcon from '../../assets/images/arrow-down1.png';
 import cartIcon from '../../assets/images/trolley.png';
 import searchIcon from '../../assets/images/search.png';
+import menuIcon from '../../assets/images/menu1.png';
+
+import ImageCarousel from '../../components/ImageCarousel';
 
 export default function Home(){
 
@@ -72,8 +75,21 @@ export default function Home(){
                         </div>
                     </a>
                 </div>
-                <div className="bottom-menu"></div>
+                <div className="bottom-menu flex items-center bg-slate-700 h-10 px-6 text-white text-sm font-medium gap-x-6">
+                    <a href="" className='flex items-center'>
+                        <img src={menuIcon} alt="" className='w-6 me-1'/>
+                        <div>All</div>
+                    </a>
+                    <a href="">Today's Deals</a>
+                    <a href="">Customer Service</a>
+                    <a href="">Registry</a>
+                    <a href="">Gift Cards</a>
+                    <a href="">Sell</a>
+                </div>
             </header>
+            <div>
+                <ImageCarousel/>
+            </div>
         </div>
     )
 }
