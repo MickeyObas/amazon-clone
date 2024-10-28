@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 import amazonLogo from '../../assets/images/amazon1.png';
@@ -10,13 +11,35 @@ export default function Login(){
     const [phoneOrEmail, setPhoneOrEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const navigate = useNavigate();
+
     const handlePhoneOrEmailSubmit = (submittedPhoneOrEmail) => {
         setPhoneOrEmail(submittedPhoneOrEmail);
         setCurrentStep(2);
     }
 
-    const handleSignIn = (submittedPhoneOrEmail, submittedPassword) => {
-        alert(`Congratulations ${submittedPhoneOrEmail}, you are now signed in!`);
+    const handleSignIn = async (submittedPhoneOrEmail, submittedPassword) => {
+        setPassword(submittedPassword);
+        try {
+            const response = await fetch('http://localhost:8000/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    'phoneOrEmail': submittedPhoneOrEmail,
+                    'password': submittedPassword
+                })
+            })
+
+            if(response.ok){
+                const data = await response.json();
+                alert(`Congratulations ${data.user.first_name}, you are now signed in!`);
+                navigate('/home');
+            }
+        }catch(err){
+            console.log(err);
+        }
     }
 
     return <>

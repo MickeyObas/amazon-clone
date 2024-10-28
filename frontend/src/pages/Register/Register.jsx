@@ -7,7 +7,7 @@ import checkMark from '../../assets/images/check.png';
 
 export default function Register(){
 
-    const naviagte = useNavigate();
+    const navigate = useNavigate();
 
     const nameInputRef = useRef(null);
     const emailorNumberInputRef = useRef(null);
@@ -15,7 +15,7 @@ export default function Register(){
     const confirmPasswordInputRef = useRef(null);
 
     const validationMessages = {
-        name: 'Enter at least 1 character',
+        name: 'Enter your name',
         mobileNumberOrEmail: 'Enter your email or mobile phone number',
         password: 'Enter at least 6 characters',
         password2: 'Type your password again'
@@ -36,6 +36,7 @@ export default function Register(){
         password: false,
         password2: false
     });
+    const [error, setError] = useState({});
 
     const [nameValid, setNameValid] = useState(null);
     const [mobileNumberOrEmailValid, setMobileNumberOrEmailValid] = useState(null);
@@ -57,6 +58,7 @@ export default function Register(){
         const value = e.target.value;
         setMobileNumberOrEmail(value);
         setMobileNumberOrEmailValid(validateMobileNumberOrEmail(value));
+        setError((prev) => ({...prev, mobile_no_or_email:''}))
     }
 
     const handlePasswordChange = (e) => {
@@ -71,9 +73,51 @@ export default function Register(){
         setConfirmPasswordValid(validateConfirmPassword(value));
     }
 
-    const handleFormSubmit = (e) => {
+    const validateForm = () => {
+        let isValid = true;
+
+        if(!validateName(name) || !validateMobileNumberOrEmail(mobileNumberOrEmail) || !validatePassword(password) || !validateConfirmPassword(password2)){
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    const handleFormSubmit = async (e) => {
         e.preventDefault();
-        naviagte('/login');
+        if(validateForm()){
+            console.log("Form's all good!");
+            confirmPasswordInputRef.current.blur();
+
+            try {
+                const response = await fetch('http://localhost:8000/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'name': name,
+                        'mobile_no_or_email': mobileNumberOrEmail,
+                        'password': password 
+                    })
+                });
+
+                if(response.ok){
+                    console.log("Fetch executed successfully");
+                    navigate('/login');
+                }else{
+                    console.log("Oops the fetch request failed for some reason")
+                    const errors = await response.json();
+                    setError(errors);
+                    console.log(errors)
+                }
+
+            } catch(err){
+                console.log(err);
+            }
+        }else{
+            return false;
+        }
     }
 
     const handleFocus = (field) => {
@@ -98,8 +142,11 @@ export default function Register(){
 
     return (
         <div className='flex flex-col items-center content-center min-h-screen pt-4 pb-6 bg-white'>
-            <img src={amazonLogo} alt="" className='w-32 mb-5'/>
-            <form method='post' className='border border-gray-300 p-4 rounded-lg w-[350px] mb-6' autoComplete='off'>
+            <img src={amazonLogo} alt="" className='w-28 mb-5'/>
+            <form 
+            method='post' 
+            onSubmit={handleFormSubmit}
+            className='border border-gray-300 p-4 rounded-lg w-[350px] mb-6' autoComplete='off'>
                 <h2 className='text-2xl font-semibold mb-3'>Create Account</h2>
                 <div className='mb-3'>
                     <label htmlFor="name" className='text-sm font-semibold block mb-1'>Your Name</label>
@@ -141,6 +188,12 @@ export default function Register(){
                         <div className='text-xs mt-1 flex items-center'>
                             <img src={mobileNumberOrEmailValid ? checkMark : exclamationMark} className='w-[12px] h-[12px] me-1'/>
                             <div className={`ml-0 ${mobileNumberOrEmailValid ? 'text-green-700' : 'text-red-600'} `}>{validationMessages.mobileNumberOrEmail}</div>
+                        </div>
+                    )}
+                    {(!isFocused.mobileOrEmail && error.mobile_no_or_email) && (
+                        <div className='text-xs mt-1 flex items-center'>
+                            <img src={exclamationMark} className='w-[12px] h-[12px] me-1'/>
+                            <div className={`ml-0 text-red-600`}>{error.mobile_no_or_email}</div>
                         </div>
                     )}   
                 </div>
@@ -187,8 +240,8 @@ export default function Register(){
                     )}
                 </div>
                 <button 
-                className='border rounded-md text-center w-full font-semibold text-sm bg-[#FFD814] py-1 mb-5 hover:bg-[#e6c314]'
-                onClick={handleFormSubmit}
+                type='submit'
+                className='border rounded-md text-center w-full font-semibold text-[13px] bg-[#FFD814] py-1 mb-5 hover:bg-[#e6c314]'
                 >Continue</button>
                 <p className='text-[13px]'>By creating an account, you agree to Amazon's <a href='' className='text-blue-800 underline'>Conditions of Use</a> and <a href='' className='text-blue-800 underline'>Privacy Notice</a>.</p>
                 <hr className='block mt-4 mb-4 h-0.5 border-t-[#e7e7e7]' />
