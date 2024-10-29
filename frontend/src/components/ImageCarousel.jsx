@@ -11,7 +11,7 @@ const images = [
 ]
 
 
-export default function ImageCarousel(){
+export default function ImageCarousel({children}){
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const nextImage = () => {
@@ -23,7 +23,7 @@ export default function ImageCarousel(){
     }
 
     return (
-        <div className="relative w-full h-screen overflow-hidden">
+        <div className="relative w-full h-screen">
           <img
             src={images[currentIndex]}
             alt={`Slide ${currentIndex + 1}`}
@@ -31,17 +31,19 @@ export default function ImageCarousel(){
           />
           <button
             onClick={prevImage}
-            className="absolute left-0 top-1/4 transform -translate-y-1/2 text-white p-2 rounded-full text-4xl"
+            className="absolute left-0 top-[20%] transform -translate-y-1/2 text-white p-3 rounded-full text-4xl"
           >
             &#10094; {/* Left Arrow */}
           </button>
           <button
             onClick={nextImage}
-            className="absolute right-0 top-1/4 transform -translate-y-1/2 text-white p-2 rounded-full text-4xl"
+            className="absolute right-0 top-[20%] transform -translate-y-1/2 text-white p-3 rounded-full text-4xl"
           >
             &#10095; {/* Right Arrow */}
           </button>
+          <div className='w-full'>
+            {children}
+          </div>
         </div>
       );
 }
-
