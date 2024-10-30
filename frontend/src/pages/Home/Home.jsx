@@ -41,7 +41,28 @@ import healthAndBeauty from '../../assets/images/health-and-beauty.jpg';
 import gaming from '../../assets/images/gaming.jpg';
 import toys from '../../assets/images/toys.jpg';
 
+import sonicShadowGen from '../../assets/images/games/sonic-shadow-gen.jpg';
+import bluey from '../../assets/images/games/bluey.jpg';
+import fortnite from '../../assets/images/games/fortnite.jpg';
+import luigisMansion from '../../assets/images/games/luigis-mansion.jpg';
+import metaphor from '../../assets/images/games/metaphor.jpg';
+import minecraft from '../../assets/images/games/minecraft.jpg';
+import mpSuperstars from '../../assets/images/games/mp-superstars.jpg';
+import nintendoSwitch from '../../assets/images/games/nintendo-switch.jpg';
+import ppShowtime from '../../assets/images/games/pp-showtime.jpg';
+import robux from '../../assets/images/games/robux.jpg';
+import robux800 from '../../assets/images/games/robux800.jpg';
+import robux1700 from '../../assets/images/games/robux1700.jpg';
+import smbJamboree from '../../assets/images/games/smb-jamboree.jpg';
+import smbUltimate from '../../assets/images/games/smb-ultimate.jpg';
+import smbWonder from '../../assets/images/games/smb-wonder.jpg';
+import sonic from '../../assets/images/games/sonic.jpg';
+import wukong from '../../assets/images/games/wukong.jpg';
+import zeldaTOTK from '../../assets/images/games/zelda-totk.jpg';
+import zelda from '../../assets/images/games/zelda.jpg';
 
+import leftArrow from '../../assets/images/left-arrow.png';
+import rightArrow from '../../assets/images/right-arrow.png';
 
 
 import ImageCarousel from '../../components/ImageCarousel';
@@ -49,6 +70,39 @@ import ImageCarousel from '../../components/ImageCarousel';
 export default function Home(){
 
     const [searchIsFocused, setSearchIsFocused] = useState(false);
+    const [isLeftButtonDim, setIsLeftButtonDim] = useState(true);
+    const [isRightButtonDim, setIsRightButtonDim] = useState(false);
+
+    const gamesCarouselDivRef = useRef(null);
+
+    const handleLeftButtonClick = () => {
+        if (gamesCarouselDivRef.current) {
+            gamesCarouselDivRef.current.scrollBy({ left: -1000, behavior: 'smooth' });
+          }
+      };
+
+      const handleRightButtonClick = () => {
+        if (gamesCarouselDivRef.current) {
+          gamesCarouselDivRef.current.scrollBy({ left: 1000, behavior: 'smooth' });
+        }
+      };
+    
+      useEffect(() => {
+        const handleScroll = () => {
+            if(gamesCarouselDivRef.current){
+                const {scrollLeft, clientWidth, scrollWidth} = gamesCarouselDivRef.current;
+                console.log(`${scrollLeft} + ${clientWidth} = ${scrollLeft+clientWidth} ? ${scrollWidth}`);
+                setIsLeftButtonDim(scrollLeft === 0);
+                setIsRightButtonDim((scrollLeft + clientWidth) >= scrollWidth);
+            }
+        }
+
+        const gamesCarouselDivCurrent = gamesCarouselDivRef.current;
+        gamesCarouselDivCurrent.addEventListener('scroll', handleScroll);
+
+        return () => gamesCarouselDivCurrent.removeEventListener('scroll', handleScroll);
+      }, [])
+
 
     return (
         <div>
@@ -325,6 +379,82 @@ export default function Home(){
                             <img src={toys} alt="" className='object-cover object-center w-full h-full'/>
                         </div>
                         <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
+                    </div>
+                </div>
+                <div className='row pt-[1px] pb-4 px-4 gap-4'>
+                    <div className='bg-white w-full h-[290px] pt-5 px-4 flex flex-col relative'>
+                        <h2 className='text-[23px] font-semibold leading-[1.2] mb-3'>Most wished for in Video Games</h2>
+                        <div ref={gamesCarouselDivRef} className='inner-content flex gap-x-7 h-[220px] overflow-x-scroll pb-[7px]'>
+                            <button 
+                            className={`absolute top-[55%] bg-white h-[30%] w-12 -translate-y-2/4 flex justify-center items-center ${isLeftButtonDim && 'bg-opacity-60'} rounded-e-md`}
+                            onClick={handleLeftButtonClick}
+                            >
+                                <img src={leftArrow} className={`w-5 ${isLeftButtonDim && 'bg-opacity-60'}`}/>
+                            </button>
+                            <button
+                            className={`absolute top-[55%] bg-white h-[30%] w-12 -translate-y-2/4 flex justify-center items-center right-0 ${isRightButtonDim && 'bg-opacity-60'} rounded-s-md`}
+                            onClick={handleRightButtonClick}
+                            >
+                                <img src={rightArrow} className={`w-5 ${isRightButtonDim && 'bg-opacity-60'}`}/>
+                            </button>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={sonicShadowGen} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0 w-'>
+                                <img src={fortnite} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={smbWonder} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={nintendoSwitch} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={zelda} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={robux} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={smbJamboree} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={bluey} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={mpSuperstars} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={metaphor} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={zeldaTOTK} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={wukong} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={smbUltimate} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={ppShowtime} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={luigisMansion} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={minecraft} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={robux800} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={robux1700} className='h-full'/>
+                            </div>
+                            <div className='img-container h-full flex-shrink-0'>
+                                <img src={mpSuperstars} className='h-full'/>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
