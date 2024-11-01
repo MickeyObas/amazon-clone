@@ -64,7 +64,6 @@ import zelda from '../../assets/images/games/zelda.jpg';
 import leftArrow from '../../assets/images/left-arrow.png';
 import rightArrow from '../../assets/images/right-arrow.png';
 
-
 import ImageCarousel from '../../components/ImageCarousel';
 
 export default function Home(){
