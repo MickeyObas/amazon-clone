@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, memo } from 'react';
+import PanelCarousel from '../../components/PanelCarousel';
 
 import AmazonLogo from '../../assets/images/amazon-white.png';
 import locationIcon from '../../assets/images/location2.png';
@@ -61,6 +62,75 @@ import wukong from '../../assets/images/games/wukong.jpg';
 import zeldaTOTK from '../../assets/images/games/zelda-totk.jpg';
 import zelda from '../../assets/images/games/zelda.jpg';
 
+import speaker1 from '../../assets/images/home-decor/speaker1.jpg';
+import pillow from '../../assets/images/home-decor/pillow.jpg';
+import medics from '../../assets/images/home-decor/medics.jpg';
+import timer from '../../assets/images/home-decor/timer.jpg';
+import pillow2 from '../../assets/images/home-decor/pillow2.jpg';
+import bedFinish from '../../assets/images/home-decor/bed-finish.jpg';
+import pillow3 from '../../assets/images/home-decor/pillow3.jpg';
+import pillow4 from '../../assets/images/home-decor/pillow-4.jpg';
+import makeup from '../../assets/images/home-decor/makeup.jpg';
+import pillow5 from '../../assets/images/home-decor/pillow-5.jpg';
+import pillow6 from '../../assets/images/home-decor/pillow-6.jpg';
+import wallFlower from '../../assets/images/home-decor/wall-flower.jpg';
+import drawer from '../../assets/images/home-decor/drawer.jpg';
+import windowCover from '../../assets/images/home-decor/window-cover.jpg';
+import windowCover2 from '../../assets/images/home-decor/window-cover2.jpg';
+
+import accessories from '../../assets/images/accessories.jpg';
+import backpack from '../../assets/images/backpack.jpg';
+import dining2 from '../../assets/images/dining2.jpg';
+import accessories2 from '../../assets/images/accessories.jpg';
+import handbags from '../../assets/images/handbags.jpg';
+import headphones2 from '../../assets/images/headphones2.jpg';
+import homeDecor2 from '../../assets/images/home-decor2.jpg';
+import kitchen2 from '../../assets/images/kitchen2.jpg';
+import smartHome from '../../assets/images/smart-home.jpg';
+import smartphones from '../../assets/images/smartphones.jpg';
+import suitcases from '../../assets/images/suitcases.jpg';
+import tablets from '../../assets/images/tablets.jpg';
+import watches from '../../assets/images/watches.jpg';
+
+const gameImages = [
+    sonicShadowGen,
+    bluey, 
+    fortnite,
+    luigisMansion,
+    metaphor,
+    minecraft,
+    mpSuperstars,
+    nintendoSwitch,
+    ppShowtime,
+    robux,
+    robux800, 
+    robux1700,
+    smbJamboree,
+    smbUltimate,
+    smbWonder,
+    wukong,
+    zeldaTOTK,
+    zelda
+]
+
+const homeDecorImages = [
+    speaker1,
+    pillow,
+    medics,
+    timer,
+    pillow2,
+    bedFinish,
+    pillow3,
+    pillow4,
+    makeup,
+    pillow5,
+    pillow6,
+    wallFlower,
+    drawer,
+    windowCover,
+    windowCover2
+]
+
 import leftArrow from '../../assets/images/left-arrow.png';
 import rightArrow from '../../assets/images/right-arrow.png';
 
@@ -85,23 +155,6 @@ export default function Home(){
           gamesCarouselDivRef.current.scrollBy({ left: 1000, behavior: 'smooth' });
         }
       };
-    
-      useEffect(() => {
-        const handleScroll = () => {
-            if(gamesCarouselDivRef.current){
-                const {scrollLeft, clientWidth, scrollWidth} = gamesCarouselDivRef.current;
-                console.log(`${scrollLeft} + ${clientWidth} = ${scrollLeft+clientWidth} ? ${scrollWidth}`);
-                setIsLeftButtonDim(scrollLeft === 0);
-                setIsRightButtonDim((scrollLeft + clientWidth) >= scrollWidth);
-            }
-        }
-
-        const gamesCarouselDivCurrent = gamesCarouselDivRef.current;
-        gamesCarouselDivCurrent.addEventListener('scroll', handleScroll);
-
-        return () => gamesCarouselDivCurrent.removeEventListener('scroll', handleScroll);
-      }, [])
-
 
     return (
         <div>
@@ -380,81 +433,129 @@ export default function Home(){
                         <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
                     </div>
                 </div>
-                <div className='row pt-[1px] pb-4 px-4 gap-4'>
-                    <div className='bg-white w-full h-[290px] pt-5 px-4 flex flex-col relative'>
-                        <h2 className='text-[23px] font-semibold leading-[1.2] mb-3'>Most wished for in Video Games</h2>
-                        <div ref={gamesCarouselDivRef} className='inner-content flex gap-x-7 h-[220px] overflow-x-scroll pb-[7px]'>
-                            <button 
-                            className={`absolute top-[55%] bg-white h-[30%] w-12 -translate-y-2/4 flex justify-center items-center ${isLeftButtonDim && 'bg-opacity-60'} rounded-e-md`}
-                            onClick={handleLeftButtonClick}
-                            >
-                                <img src={leftArrow} className={`w-5 ${isLeftButtonDim && 'bg-opacity-60'}`}/>
-                            </button>
-                            <button
-                            className={`absolute top-[55%] bg-white h-[30%] w-12 -translate-y-2/4 flex justify-center items-center right-0 ${isRightButtonDim && 'bg-opacity-60'} rounded-s-md`}
-                            onClick={handleRightButtonClick}
-                            >
-                                <img src={rightArrow} className={`w-5 ${isRightButtonDim && 'bg-opacity-60'}`}/>
-                            </button>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={sonicShadowGen} className='h-full'/>
+                <PanelCarousel title={"Most wished for in Video Games"} images={gameImages} />
+                <PanelCarousel title={`Home Decor under $20`} images={homeDecorImages} />
+                <div className='row flex pt-[1px] pb-4 px-4 gap-4'>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3 leading-[1.2]'>Most-loved travel essentials</h2>
+                        <div className='inner-content grid grid-cols-2 gap-3 gap-y-9'>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={backpack} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Backpacks</span>
                             </div>
-                            <div className='img-container h-full flex-shrink-0 w-'>
-                                <img src={fortnite} className='h-full'/>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={suitcases} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Suitcases</span>
                             </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={smbWonder} className='h-full'/>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={accessories2} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Accessories</span>
                             </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={nintendoSwitch} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={zelda} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={robux} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={smbJamboree} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={bluey} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={mpSuperstars} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={metaphor} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={zeldaTOTK} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={wukong} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={smbUltimate} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={ppShowtime} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={luigisMansion} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={minecraft} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={robux800} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={robux1700} className='h-full'/>
-                            </div>
-                            <div className='img-container h-full flex-shrink-0'>
-                                <img src={mpSuperstars} className='h-full'/>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={handbags} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Handbags</span>
                             </div>
                         </div>
+                        <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
                     </div>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3 leading-[1.2]'>New arrivals inspired by your recent searches</h2>
+                        <div className='inner-content flex flex-col h-full'>
+                            <div className=' w-full h-full flex content-center items-center overflow-hidden'>
+                                <img src={smartphones} alt="" className='max-w-full h-auto'/>
+                            </div>
+                            <p className='text-[13px] leading-[1.2] mt-1 mb-2'>Intel® Core™ i7-12700 Desktop Processor 25MB Cache up to 4.90GHz</p>
+                            <div className='flex h-[10%] items-top font-medium text-lg'>
+                                <span className='block text-[13px] leading-[1.4] me-0.5'>$</span>
+                                <span className='block text-[22px] leading-[1]'>253</span>
+                                <span className='block text-xs me-0.5 font-normal'>64</span>
+                            </div>
+                            <div className='magnify-row flex gap-x-2 h-full'>
+                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
+                                    <img src={watches} alt="" className='w-50 h-50'/>
+                                </div>
+                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
+                                    <img src={watches} alt="" className='h-auto'/>
+                                </div>
+                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
+                                    <img src={watches} alt="" className='h-auto'/>
+                                </div>
+                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
+                                    <img src={watches} alt="" className='h-auto'/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3'>Wireless Tech</h2>
+                        <div className='inner-content grid grid-cols-2 gap-3 gap-y-9'>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={smartphones} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Smartphones</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={watches} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Watches</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={watches} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Headphones</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={tablets} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Tablets</span>
+                            </div>
+                        </div>
+                        <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
+                    </div>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3'>Fanastic finds for homes</h2>
+                        <div className='inner-content grid grid-cols-2 gap-3 gap-y-9'>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={kitchen2} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Kitchen</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={homeDecor2} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Home Decor</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={dining2} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Dining</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={smartHome} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Smart Home</span>
+                            </div>
+                        </div>
+                        <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
+                    </div>
+
                 </div>
             </div>
         </div>
