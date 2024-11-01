@@ -91,6 +91,43 @@ import smartphones from '../../assets/images/smartphones.jpg';
 import suitcases from '../../assets/images/suitcases.jpg';
 import tablets from '../../assets/images/tablets.jpg';
 import watches from '../../assets/images/watches.jpg';
+import intelImage from '../../assets/images/intelImage.jpg';
+
+import boysWatch from '../../assets/images/boysWatch.jpg';
+import brushes from '../../assets/images/brushes.jpg';
+import desktops from '../../assets/images/desktops.jpg';
+import girlsWatch from '../../assets/images/girlsWatch.jpg';
+import hardDrives from '../../assets/images/hard-drives.jpg';
+import laptops from '../../assets/images/laptops.jpg';
+import makeup2 from '../../assets/images/makeup2.jpg';
+import menWatch from '../../assets/images/menWatch.jpg';
+import mirrors from '../../assets/images/mirrors.jpg';
+import pcAcessories from '../../assets/images/pc-accessories.jpg';
+import sponges from '../../assets/images/sponges.jpg';
+import womenWatch from '../../assets/images/womenWatch.jpg';
+
+import its1 from '../../assets/images/international/its1.jpg';
+import its2 from '../../assets/images/international/its2.jpg';
+import its3 from '../../assets/images/international/its3.jpg';
+import its4 from '../../assets/images/international/its4.jpg';
+import its5 from '../../assets/images/international/its5.jpg';
+import its6 from '../../assets/images/international/its6.jpg';
+import its7 from '../../assets/images/international/its7.jpg';
+import its8 from '../../assets/images/international/its8.jpg';
+import its9 from '../../assets/images/international/its9.jpg';
+import its10 from '../../assets/images/international/its10.jpg';
+import its11 from '../../assets/images/international/its11.jpg';
+import its12 from '../../assets/images/international/its12.jpg';
+import its13 from '../../assets/images/international/its13.jpg';
+import its14 from '../../assets/images/international/its14.jpg';
+import its15 from '../../assets/images/international/its15.jpg';
+import its16 from '../../assets/images/international/its16.jpg';
+import its17 from '../../assets/images/international/its17.jpg';
+import its18 from '../../assets/images/international/its18.jpg';
+import its19 from '../../assets/images/international/its19.jpg';
+import itsPlusOne from '../../assets/images/international/itsplus1.jpg';
+import itsPlusTwo from '../../assets/images/international/itsplus2.jpg';
+
 
 const gameImages = [
     sonicShadowGen,
@@ -129,6 +166,28 @@ const homeDecorImages = [
     drawer,
     windowCover,
     windowCover2
+]
+
+const internationalTopSellersImages = [
+    its1,
+    its2,
+    its3,
+    its4,
+    its6,
+    its7,
+    its8,
+    its9,
+    its10,
+    its11,
+    its12,
+    its13,
+    its14,
+    its15,
+    its16,
+    its17,
+    its18,
+    itsPlusOne,
+    itsPlusTwo
 ]
 
 import leftArrow from '../../assets/images/left-arrow.png';
@@ -468,32 +527,31 @@ export default function Home(){
                     </div>
                     <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
                         <h2 className='text-[23px] font-semibold mb-3 leading-[1.2]'>New arrivals inspired by your recent searches</h2>
-                        <div className='inner-content flex flex-col h-full'>
-                            <div className=' w-full h-full flex content-center items-center overflow-hidden'>
-                                <img src={smartphones} alt="" className='max-w-full h-auto'/>
+                        <div className='inner-content flex flex-col h-[80%]'>
+                            <div className=' w-full flex content-center items-center overflow-hidden'>
+                                <img src={intelImage} alt="" className='scale-50'/>
                             </div>
                             <p className='text-[13px] leading-[1.2] mt-1 mb-2'>Intel® Core™ i7-12700 Desktop Processor 25MB Cache up to 4.90GHz</p>
-                            <div className='flex h-[10%] items-top font-medium text-lg'>
+                            <div className='flex items-top font-medium text-lg'>
                                 <span className='block text-[13px] leading-[1.4] me-0.5'>$</span>
                                 <span className='block text-[22px] leading-[1]'>253</span>
                                 <span className='block text-xs me-0.5 font-normal'>64</span>
                             </div>
-                            <div className='magnify-row flex gap-x-2 h-full'>
-                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
-                                    <img src={watches} alt="" className='w-50 h-50'/>
+                            <div className='magnify-row flex gap-x-2 h-[20%] mt-4'>
+                                <div className='flex content-center items-center overflow-hidden border border-black rounded-xl w-1/4'>
+                                    <img src={headphones} alt="" className='w-full'/>
                                 </div>
-                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
-                                    <img src={watches} alt="" className='h-auto'/>
+                                <div className='flex content-center items-center overflow-hidden border border-black rounded-xl w-1/4'>
+                                    <img src={keyboard} alt="" className='w-full'/>
                                 </div>
-                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
-                                    <img src={watches} alt="" className='h-auto'/>
+                                <div className='flex content-center items-center overflow-hidden border border-black rounded-xl w-1/4'>
+                                    <img src={chair} alt="" className='w-full'/>
                                 </div>
-                                <div className='flex content-center items-center overflow-hidden h-full border-black rounded-xl'>
-                                    <img src={watches} alt="" className='h-auto'/>
+                                <div className='flex content-center items-center overflow-hidden border border-black rounded-xl w-1/4'>
+                                    <img src={makeup} alt="" className='w-full'/>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
                         <h2 className='text-[23px] font-semibold mb-3'>Wireless Tech</h2>
@@ -555,9 +613,183 @@ export default function Home(){
                         </div>
                         <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
                     </div>
-
+                </div>
+                <div className='row flex pt-[1px] pb-4 px-4 gap-4'>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3 leading-[1.2]'>Fantastic finds for homes</h2>
+                        <div className='inner-content grid grid-cols-2 gap-3 gap-y-9'>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[130px] flex content-center items-center overflow-hidden'>
+                                    <img src={kitchen2} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Kitchen</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[130px] flex content-center items-center overflow-hidden'>
+                                    <img src={homeDecor2} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Home Decor</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[130px] flex content-center items-center overflow-hidden'>
+                                    <img src={dining2} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Dining</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[130px] flex content-center items-center overflow-hidden'>
+                                    <img src={smartHome} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Smart Home</span>
+                            </div>
+                        </div>
+                        <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
+                    </div>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3 leading-[1.2]'>Score the top PCs and Accessories</h2>
+                        <div className='inner-content grid grid-cols-2 gap-3 gap-y-9'>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={desktops} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Desktops</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={laptops} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Laptops</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={hardDrives} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Harddrives</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={pcAcessories} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>PC Accessories</span>
+                            </div>
+                        </div>
+                        <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
+                    </div>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3 leading-[1.2]'>Level up your beauty routine</h2>
+                        <div className='inner-content grid grid-cols-2 gap-3 gap-y-9'>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={makeup} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Makeup</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={brushes} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Brushes</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={sponges} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Sponges</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[116px] flex content-center items-center overflow-hidden'>
+                                    <img src={mirrors} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Mirrors</span>
+                            </div>
+                        </div>
+                        <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
+                    </div>
+                    <div className='bg-white w-[300px] h-[420px] py-5 px-4 flex flex-col'>
+                        <h2 className='text-[23px] font-semibold mb-3'>Most loved watches</h2>
+                        <div className='inner-content grid grid-cols-2 gap-3 gap-y-9'>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[124px] flex content-center items-center overflow-hidden'>
+                                    <img src={womenWatch} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Women</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[124px] flex content-center items-center overflow-hidden'>
+                                    <img src={menWatch} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Men</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[124px] flex content-center items-center overflow-hidden'>
+                                    <img src={girlsWatch} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Girls</span>
+                            </div>
+                            <div className='relative'>
+                                <div className=' w-[125px] h-[124px] flex content-center items-center overflow-hidden'>
+                                    <img src={boysWatch} alt="" className='max-w-full h-auto scale-150'/>
+                                </div>
+                                <span className='text-xs font-medium absolute left-0 bottom-[-16px]'>Boys</span>
+                            </div>
+                        </div>
+                        <a href="" className='text-[13px] mt-auto text-blue-800'>See all deals</a>
+                    </div>
+                </div>
+                <PanelCarousel title={'International Top Sellers for you'} images={internationalTopSellersImages}/>
+            </div>
+            <footer className='bg-slate-800 '>
+                <div className='footer-wrapper flex flex-col pt-8 px-32 pb-24'>
+                    <div className='main-footer-links text-slate-300 flex justify-between'>
+                    <div className='link-batch flex flex-col'>
+                        <div className='text-[16px] font-semibold text-white mb-2'>Get to know us</div>
+                        <div className='links flex flex-col text-[14px] gap-2 leading-[1.3]'>
+                            <a href="">Careers</a>
+                            <a href="">Blog</a>
+                            <a href="">About Amazon</a>
+                            <a href="">Investor Relations</a>
+                            <a href="">Amazon Devices</a>
+                            <a href="">Amazon Services</a>
+                        </div>
+                    </div>
+                    <div className='link-batch flex flex-col'>
+                        <div className='text-[16px] font-semibold text-white mb-2'>Make Money with Us</div>
+                        <div className='links flex flex-col text-[14px] gap-2 leading-[1.3]'>
+                            <a href="">Sell products on Amazon</a>
+                            <a href="">Sell on Amazon Business</a>
+                            <a href="">Sell apps on Amazon</a>
+                            <a href="">Become an Affiliate</a>
+                            <a href="">Advertise Your Products</a>
+                            <a href="">Self-Publish with Us</a>
+                            <a href="">Host an Amazon Hub</a>
+                            <a href="">See More Make Money<br />with Us</a>
+                        </div>
+                    </div>
+                    <div className='link-batch flex flex-col'>
+                        <div className='text-[16px] font-semibold text-white mb-2'>Amazon Payment Products</div>
+                        <div className='links flex flex-col text-[14px] gap-2 leading-[1.3]'>
+                            <a href="">Amazon Business Card</a>
+                            <a href="">Shop with Points</a>
+                            <a href="">About Amazon</a>
+                            <a href="">Reload Your Balance</a>
+                            <a href="">Amazon Currency Converter</a>
+                        </div>
+                    </div>
+                    <div className='link-batch flex flex-col'>
+                        <div className='text-[16px] font-semibold text-white mb-2'>Let us Help You</div>
+                        <div className='links flex flex-col text-[14px] gap-2 leading-[1.3]'>
+                            <a href="">Amazon and COVID-19</a>
+                            <a href="">Your Account</a>
+                            <a href="">Your Orders</a>
+                            <a href="">Shipping Rates &<br />Policies</a>
+                            <a href="">Returns &<br />Replacements</a>
+                            <a href="">Manage Your<br />Content and Devices</a>
+                            <a href="">Help</a>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </footer>
         </div>
     )
 }
