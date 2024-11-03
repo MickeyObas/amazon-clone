@@ -55,3 +55,6 @@ body, .fancy-line:after {
   margin: 5px;
 }
 
+.invalid-user{
+  box-shadow: 0 0 0 4px #fcf4f4 inset;
+}

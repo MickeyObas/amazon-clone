@@ -1,4 +1,5 @@
 export { default as AmazonLogo } from '../../assets/images/amazon-white.png';
+export { default as AmazonLogoBlack } from '../../assets/images/amazon1.png';
 export { default as usaIcon } from '../../assets/images/united-states.png';
 
 export { default as headphones } from '../../assets/images/headphones.jpg';
@@ -123,3 +124,5 @@ export { default as itsPlusTwo } from '../../assets/images/international/itsplus
 export { default as globeIcon } from '../../assets/images/globe-2.png';
 export { default as upDownIcon } from '../../assets/images/arrows-up-and-down-filled-triangles.png';
 export { default as dollarIcon } from '../../assets/images/dollar.png';
+
+export { default as warningIcon } from '../../assets/images/warning.png';
