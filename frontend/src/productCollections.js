@@ -1,8 +1,5 @@
 import { 
-    AmazonLogo, 
-    usaIcon, 
     headphones, 
-    chair, 
     mouse, 
     keyboard, 
     bedding, 
@@ -17,29 +14,20 @@ import {
     homeImprovement, 
     decor, 
     beddingAndBath, 
-    cooker, 
-    coffee, 
-    pots, 
-    kettles, 
     dining, 
     home, 
     kitchen, 
     healthAndBeauty, 
-    gaming, 
-    toys, 
     makeup, 
-    backpack, 
-    dining2, 
+    backpack,  
     accessories2, 
     handbags, 
-    homeDecor2, 
     kitchen2, 
     smartHome, 
     smartphones, 
     suitcases, 
     tablets, 
     watches, 
-    intelImage, 
     boysWatch, 
     brushes, 
     desktops, 
@@ -51,9 +39,7 @@ import {
     pcAcessories, 
     sponges, 
     womenWatch, 
-    globeIcon, 
-    upDownIcon, 
-    dollarIcon 
+    headphones2
 } from './assets/images/images';
 
 export const gamingAccessories = [
@@ -72,5 +58,195 @@ export const gamingAccessories = [
     {
         title: 'Chairs',
         image: headphones
+    },
+]
+
+export const homeEssentials = [
+    {
+        title: 'Cleaning Tools',
+        image: cleaningTools
+    },
+    {
+        title: 'Home Storage',
+        image: homeStorage
+    },
+    {
+        title: 'Home Decor',
+        image: homeDecor
+    },
+    {
+        title: 'Bedding',
+        image: bedding
+    }
+]
+
+export const fashionShopDeals = [
+    {
+        title: 'Jeans under $50',
+        image: jeansUnder50
+    },
+    {
+        title: 'Tops under $25',
+        image: topsUnder25
+    },
+    {
+        title: 'Dresses under $30',
+        image: dressesUnder30
+    },
+    {
+        title: 'Shoes under $50',
+        image: shoesUnder50
+    }
+]
+
+export const homeArrivalsUnder50 = [
+    {
+        title: 'Kitchen & Dining',
+        image: kitchenAndDining
+    },
+    {
+        title: 'Home Improvement',
+        image: homeImprovement
+    },
+    {
+        title: 'Decor',
+        image: decor
+    },
+    {
+        title: 'Bedding & Bath',
+        image: beddingAndBath
+    }
+]
+
+export const refreshSpace = [
+    {
+        title: 'Dining',
+        image: dining
+    },
+    {
+        title: 'Home',
+        image: home
+    },
+    {
+        title: 'Kitchen',
+        image: kitchen
+    },
+    {
+        title: 'Health & Beauty',
+        image: healthAndBeauty
+    }
+]
+
+export const mostLovedTravelEssentials = [
+    {
+        title: 'Backpacks',
+        image: backpack
+    },
+    {
+        title: 'Suitcases',
+        image: suitcases
+    },
+    {
+        title: 'Accessories',
+        image: accessories2
+    },
+    {
+        title: 'Handbags',
+        image: handbags
+    },
+]
+
+export const wirelessTech = [
+    {
+        title: 'Smartphones',
+        image: smartphones
+    },
+    {
+        title: 'Watches',
+        image: watches
+    },
+    {
+        title: 'Headphones',
+        image: headphones2
+    },
+    {
+        title: 'Tablets',
+        image: tablets
+    },
+]
+
+export const fantasticFindsForHomes = [
+    {
+        title: 'Kitchen',
+        image: kitchen2
+    },
+    {
+        title: 'Home Decor',
+        image: homeDecor
+    },
+    {
+        title: 'Dining',
+        image: dining
+    },
+    {
+        title: 'Smart Home',
+        image: smartHome
+    },
+]
+
+export const topPCsAndAcessories = [
+    {
+        title: 'Desktops',
+        image: desktops
+    },
+    {
+        title: 'Laptops',
+        image: laptops
+    },
+    {
+        title: 'Hard Drives',
+        image: hardDrives
+    },
+    {
+        title: 'PC Acessories',
+        image: pcAcessories
+    },
+]
+
+export const beautyRoutineLevelUp = [
+    {
+        title: 'Makeup',
+        image: makeup
+    },
+    {
+        title: 'Brushes',
+        image: brushes
+    },
+    {
+        title: 'Sponges',
+        image: sponges
+    },
+    {
+        title: 'Mirrors',
+        image: mirrors
+    },
+]
+
+export const mostLovedWatches = [
+    {
+        title: 'Women',
+        image: womenWatch
+    },
+    {
+        title: 'Men',
+        image: menWatch
+    },
+    {
+        title: 'Girls',
+        image: girlsWatch
+    },
+    {
+        title: 'Boys',
+        image: boysWatch
     },
 ]
