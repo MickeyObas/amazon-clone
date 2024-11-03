@@ -1,0 +1,76 @@
+import { 
+    AmazonLogo, 
+    usaIcon, 
+    headphones, 
+    chair, 
+    mouse, 
+    keyboard, 
+    bedding, 
+    cleaningTools, 
+    homeDecor, 
+    homeStorage, 
+    jeansUnder50, 
+    topsUnder25, 
+    dressesUnder30, 
+    shoesUnder50, 
+    kitchenAndDining, 
+    homeImprovement, 
+    decor, 
+    beddingAndBath, 
+    cooker, 
+    coffee, 
+    pots, 
+    kettles, 
+    dining, 
+    home, 
+    kitchen, 
+    healthAndBeauty, 
+    gaming, 
+    toys, 
+    makeup, 
+    backpack, 
+    dining2, 
+    accessories2, 
+    handbags, 
+    homeDecor2, 
+    kitchen2, 
+    smartHome, 
+    smartphones, 
+    suitcases, 
+    tablets, 
+    watches, 
+    intelImage, 
+    boysWatch, 
+    brushes, 
+    desktops, 
+    girlsWatch, 
+    hardDrives, 
+    laptops, 
+    menWatch, 
+    mirrors, 
+    pcAcessories, 
+    sponges, 
+    womenWatch, 
+    globeIcon, 
+    upDownIcon, 
+    dollarIcon 
+} from './assets/images/images';
+
+export const gamingAccessories = [
+    {
+        title: 'Headsets',
+        image: headphones
+    },
+    {
+        title: 'Keyboards',
+        image: keyboard
+    },
+    {
+        title: 'Computer Mice',
+        image: mouse
+    },
+    {
+        title: 'Chairs',
+        image: headphones
+    },
+]
