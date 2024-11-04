@@ -55,7 +55,9 @@ export default function Header(){
                 <a href="" className='me-5'>
                     <div className='top-menu-tab flex items-center'>
                         <div className='flex flex-col text-white'>
-                            <div className='text-[12px] font-medium mb-0'>Hello, {user ? <span>{user.first_name}</span> : <span>sign in</span>}</div>
+                            <div className='text-[12px] font-medium mb-0'>
+                                Hello, <span>{user ? user.first_name : 'sign in'}</span>
+                            </div>
                             <div className='font-bold mt-0 text-sm'>Accounts & Lists</div>
                         </div>
                         <img src={downIcon} className='w-3 self-end ms-0.5'/>
