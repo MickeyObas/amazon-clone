@@ -15,14 +15,13 @@ def users_list(request):
     return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
-def user_detail(request, pk):
-    try:
-        user = CustomUser.objects.get(id=pk)
-    except CustomUser.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
-    serializer = UserSerializer(user)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+def user_detail(request):
+    print(request.user)
+    if request.user.is_authenticated:
+        user = request.user
+        serializer = UserSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({'detail': 'User not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['POST'])
 def check_user(request):

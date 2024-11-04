@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 import AmazonLogo from '../assets/images/amazon-white.png';
 import locationIcon from '../assets/images/location2.png';
@@ -8,9 +8,12 @@ import cartIcon from '../assets/images/trolley.png';
 import searchIcon from '../assets/images/search.png';
 import menuIcon from '../assets/images/menu1.png';
 
+import { AuthContext } from '../AuthContext';
+
 
 export default function Header(){
 
+    const { user } = useContext(AuthContext);
     const [searchIsFocused, setSearchIsFocused] = useState(false);
 
     return (
@@ -52,7 +55,7 @@ export default function Header(){
                 <a href="" className='me-5'>
                     <div className='top-menu-tab flex items-center'>
                         <div className='flex flex-col text-white'>
-                            <div className='text-[12px] font-medium mb-0'>Hello, sign in</div>
+                            <div className='text-[12px] font-medium mb-0'>Hello, {user ? <span>{user.first_name}</span> : <span>sign in</span>}</div>
                             <div className='font-bold mt-0 text-sm'>Accounts & Lists</div>
                         </div>
                         <img src={downIcon} className='w-3 self-end ms-0.5'/>

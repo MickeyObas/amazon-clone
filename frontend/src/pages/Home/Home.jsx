@@ -4,6 +4,9 @@ import ImageCarousel from '../../components/ImageCarousel';
 import PanelCarousel from '../../components/PanelCarousel';
 import ProductItemGrid from '../../components/ProductItemGrid';
 
+import { useContext } from 'react';
+import { AuthContext } from '../../AuthContext';
+
 import { 
     headphones, 
     chair, 
@@ -40,6 +43,8 @@ import {
 
 
 export default function Home(){
+
+    const { user } = useContext(AuthContext);
 
     return (
         <div>

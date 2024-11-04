@@ -5,12 +5,17 @@ import PropTypes from 'prop-types';
 import { AmazonLogoBlack, warningIcon } from '../../assets/images/images';
 import exclamationMark from '../../assets/images/exclamation3.png';
 
+import { useContext } from 'react';
+import { AuthContext } from '../../AuthContext';
+
 const regexPatterns = {
     email: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
     phone: /^[0-9]{11,15}$/
 }
 
 export default function Login(){
+
+    const { login } = useContext(AuthContext);
 
     const [currentStep, setCurrentStep] = useState(1);
     const [phoneOrEmail, setPhoneOrEmail] = useState('');
@@ -39,11 +44,15 @@ export default function Login(){
 
             if(response.ok){
                 const data = await response.json();
-                alert(`Congratulations ${data.user.first_name}, you are now signed in!`);
-                navigate('/');
-            }else{
-                const data = await response.json();
-                setError(data.error)
+                if(data.access){
+                    localStorage.setItem('accessToken', data.access);
+                    localStorage.setItem('refreshToken', data.refresh);
+                    login(data.user);
+                    const from = location.state?.from || '/';
+                    navigate(from);
+                }else{
+                    setError(data.error);
+                }
             }
         }catch(err){
             console.log(err);

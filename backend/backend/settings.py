@@ -66,6 +66,13 @@ AUTHENTICATION_BACKENDS = [
     'backend.backends.CustomUserBackend',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
