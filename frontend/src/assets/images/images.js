@@ -126,3 +126,8 @@ export { default as upDownIcon } from '../../assets/images/arrows-up-and-down-fi
 export { default as dollarIcon } from '../../assets/images/dollar.png';
 
 export { default as warningIcon } from '../../assets/images/warning.png';
+
+// Images for Results
+export { default as zict } from '../../assets/images/products/zict.jpg';
+export { default as starFull } from '../../assets/images/star-full.png';
+export { default as starEmpty } from '../../assets/images/star-empty.png';

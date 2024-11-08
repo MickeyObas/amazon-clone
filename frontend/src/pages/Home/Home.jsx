@@ -48,7 +48,6 @@ export default function Home(){
 
     return (
         <div>
-            <Header />
             <div className='bg-slate-200 main-content relative-'>
                 <ImageCarousel>
                     <div className='absolute top-[40%] w-full'>
@@ -248,7 +247,6 @@ export default function Home(){
                 </div>
                 <PanelCarousel title={'International Top Sellers for you'} images={internationalTopSellersImages}/>
             </div>
-            <Footer />
         </div>
     )
 }
