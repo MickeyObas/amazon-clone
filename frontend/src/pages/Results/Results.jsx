@@ -1,4 +1,4 @@
-import { starFull, zict } from "../../assets/images/images";
+import { starEmpty, starFull, zict } from "../../assets/images/images";
 import downIcon from "../../assets/images/caret-down2.png";
 
 export default function Results(){
@@ -7,9 +7,71 @@ export default function Results(){
             <div className="p-2 shadow-md border border-b-slate-300">
                 <h2 className="text-sm font-medium">1-48 of over 30,000 results for <span className="text-red-500">"Dinnerware & accessories"</span></h2>
             </div>
-            <div className="results-inner-container grid grid-cols-1 md:grid-cols-5 py-3 px-2">
+            <div className="results-inner-container grid grid-cols-1 md:grid-cols-5 py-3 px-4">
+                {/* Filters Sidebar */}
                 <aside className="md:col-span-1">
-                    <h2 className="font-semibold text-sm">Department</h2>
+                    <div className="sidebar-inner flex flex-col gap-y-5">
+                        <div className="department flex flex-col">
+                            <h2 className="font-semibold text-sm mb-1.5">Department</h2>
+                            <a href="" className="hover:text-red-600 text-sm mb-1">Kitchen & Dining</a>
+                            <div className="flex flex-col ms-4 gap-y-[2px]">
+                                <a href="" className="hover:text-red-600 text-sm">Rice Cookers</a>
+                                <a href="" className="hover:text-red-600 text-sm">Pressure Cookers</a>
+                                <a href="" className="hover:text-red-600 text-sm">Electric Pressure Cookers</a>
+                                <a href="" className="hover:text-red-600 text-sm">Slow Cookers</a>
+                                <a href="" className="hover:text-red-600 text-sm">Electric Hot Pots</a>
+                                <a href="" className="hover:text-red-600 text-sm">Egg Cookers</a>
+                                <a href="" className="hover:text-red-600 text-sm">Sous Vide Machines</a>
+                            </div>
+                        </div>
+                        <div className="reviews">
+                            <h2 className="font-semibold text-sm mb-1.5">Customer Reviews</h2>
+                            <div className="flex">
+                                <div className="rating flex max-w-full items-center gap-x-0.5 items-center">
+                                    <img src={starFull} className="h-4"/>
+                                    <img src={starFull} className="h-4"/>
+                                    <img src={starFull} className="h-4"/>
+                                    <img src={starFull} className="h-4"/>
+                                    <img src={starEmpty} className="h-[16.2px]"/>
+                                </div>
+                                <div className="text-[13px] ms-1">& Up</div>
+                            </div>
+                        </div>
+                        <div className="brands">
+                            <h2 className="font-semibold text-sm mb-1.5">Brands</h2>
+                            <div className="options flex flex-col gap-y-0.5">
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    Instant
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    Ninja
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    Crock-Pot
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    Hawkins
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    AROMA
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    CUCKOO
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    Fissler
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </aside>
                 <div className="results-content md:col-span-4">
                     <h1 className="text-xl font-bold">Results</h1>
