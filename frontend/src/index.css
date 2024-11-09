@@ -58,3 +58,20 @@ body, .fancy-line:after {
 .invalid-user{
   box-shadow: 0 0 0 4px #fcf4f4 inset;
 }
+
+#priceSlider .range-slider__thumb{
+  background-color: #fcf4f4;
+  /* background-color: rgb(26, 141, 141); */
+  height: 27.5px;
+  width: 27.5px;
+  border: 8px solid rgb(24, 122, 122);
+  box-shadow: 0 0 6px 6px rgba(0,0,0,0.1);
+}
+
+/* #priceSlider .range-slider__thumb:focus{
+  outline: solid 3px rgb(24, 122, 122);
+} */
+
+#priceSlider .range-slider__range{
+  background-color: rgb(24, 122, 122);
+}
