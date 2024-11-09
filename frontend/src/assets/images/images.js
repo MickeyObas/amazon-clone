@@ -130,4 +130,5 @@ export { default as warningIcon } from '../../assets/images/warning.png';
 // Images for Results
 export { default as zict } from '../../assets/images/products/zict.jpg';
 export { default as starFull } from '../../assets/images/star-full.png';
+export { default as downIcon } from '../../assets/images/caret-down2.png';
 export { default as starEmpty } from '../../assets/images/star-empty-2.png';

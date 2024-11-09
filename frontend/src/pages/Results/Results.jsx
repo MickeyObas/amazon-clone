@@ -4,6 +4,8 @@ import { useState } from 'react';
 
 import { starEmpty, starFull, zict } from "../../assets/images/images";
 import downIcon from "../../assets/images/caret-down2.png";
+import ProductResultBox from '../../components/ProductResultBox';
+import { products } from '../../products';
 
 export default function Results(){
 
@@ -91,7 +93,7 @@ export default function Results(){
                                     className={'mt-4 max-w-[70%] me-2 bottom-1/2 absolute translate-y-1/2'}   
                                     min={100}
                                     max={2000}
-                                    step={100}
+                                    step={50}
                                     value={sliderValue}
                                     onInput={handleSliderChange}
                                 />
@@ -123,6 +125,23 @@ export default function Results(){
                                 </label>
                             </div>
                         </div>
+                        <div className="condition">
+                            <h2 className="font-bold text-sm mb-1.5">Condition</h2>
+                            <div className="options flex flex-col gap-y-0.5">
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    New
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    Used
+                                </label>
+                                <label className="text-sm">
+                                    <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
+                                    Refurbished
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </aside>
                 <div className="results-content md:col-span-4">
@@ -130,38 +149,13 @@ export default function Results(){
                     <p className="text-sm text-slate-600">Check each product page for other buying options. Price and other details may vary based on product size and color.</p>
                     <div className="inner-content py-1">
                         <div className="row flex gap-2 mb-2">
-                            <div className="product-card w-[250px] border rounded-md flex flex-col">
-                                <div className="img-container h-[250px] flex items-center justify-center">
-                                    <img src={zict} />
-                                </div>
-                                <div className="product-content border-t py-0.5 px-2 h-[325px] w-full">
-                                    <a href="" className="text-xs text-blue-900 underline">+9 other colors/patterns</a>
-                                    <h1 className="max-w-[95%] font-medium mt-2">102PCS Purple and Gold Plastic Plates - Purple Disposable Plates - High End Purple Party Plates Include</h1>
-                                    <div className="flex gap-1 items-center mt-2">
-                                        <div className="rating flex max-w-full h-6 items-center">
-                                            <img src={starFull} className="h-4"/>
-                                            <img src={starFull} className="h-4"/>
-                                            <img src={starFull} className="h-4"/>
-                                            <img src={starFull} className="h-4"/>
-                                            <img src={starFull} className="h-4"/>
-                                        </div>
-                                        <img src={downIcon} alt="" className="h-3"/>
-                                        <h4 className="text-sm text-slate-500">254</h4>
-                                    </div>
-                                    <h4 className="text-sm text-slate-600">50+ bought in past month</h4>
-                                    <div className="mt-3 flex gap-1 items-center">
-                                        <div className='flex items-top font-medium text-lg'>
-                                            <span className='block text-sm leading-[1.4] me-[1px]'>$</span>
-                                            <span className='block text-[24px] leading-[1]'>253</span>
-                                            <span className='block text-xs me-0.5 font-normal'>64</span>
-                                        </div>
-                                        <div className="text-slate-600 text-sm">($0.44/Count)</div>
-                                    </div>
-                                    <div className="text-sm mt-1.5">Delivery <span className="font-semibold">Wed, Nov 27</span></div>
-                                    <div className="text-xs mt-1">Ships to Nigeria</div>
-                                    <button className="bg-[#FFD814] py-2 px-3 rounded-full text-xs font-medium mt-2">Add to Cart</button>
-                                </div>
-                            </div>
+                            <ProductResultBox 
+                                image={zict}
+                                description={"Some random stuff sha"}
+                                stock={256}
+                                priceMain={241}
+                                priceSub={43}
+                            />
                             <div className="product-card w-[250px] border rounded-md flex flex-col">
                                 <div className="img-container h-[250px] flex items-center justify-center">
                                     <img src={zict} />
@@ -524,4 +518,36 @@ export default function Results(){
             </div>
         </div>
     )
+}
+
+const groupProducts = (products) => {
+    const groupedProducts = [];
+    for(let i=0; i < products.length; i+=4){
+        groupedProducts.push(products.slice(i, i+=4))
+    }
+    return groupedProducts;
+}
+
+const renderProducts = (products) => {
+    const rows = groupProducts(products);
+
+    return (
+        <div className="inner-content py-1">
+            {rows.map((row, rowidx) => (
+                <div key={rowidx} className="row flex gap-2 mb-2">
+                    {row.map((product, productidx) => (
+                        <ProductResultBox 
+                            key={productidx}
+                            image={zict}
+                            description={"Some random stuff sha"}
+                            stock={256}
+                            priceMain={241}
+                            priceSub={43}
+                        />
+                    ))}
+                </div>
+            ))}
+        </div>
+    )
+
 }
