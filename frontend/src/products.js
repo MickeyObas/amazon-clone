@@ -30,7 +30,7 @@ const product_4 = {
 }
 const product_5 = {
     image: zict,
-    description: "Electric Spin Scrubber, Cordless Cleaning Brush Scrubber for Home, 400RPM/Mins-8 Replaceable",
+    description: "Hssss Cordless Cleaning Brush Scrubber for Home, 400RPM/Mins-8 Replaceable",
     stock: 240,
     priceMain: 312,
     priceSub: 91
@@ -58,7 +58,7 @@ const product_8 = {
 }
 const product_9 = {
     image: zict,
-    description: "Electric Spin Scrubber, Cordless Cleaning Brush Scrubber for Home, 400RPM/Mins-8 Replaceable",
+    description: "Last Electric Spin Scrubber, Cordless Cleaning Brush Scrubber for Home, 400RPM/Mins-8 Replaceable",
     stock: 240,
     priceMain: 312,
     priceSub: 91

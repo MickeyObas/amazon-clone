@@ -132,3 +132,8 @@ export { default as zict } from '../../assets/images/products/zict.jpg';
 export { default as starFull } from '../../assets/images/star-full.png';
 export { default as downIcon } from '../../assets/images/caret-down2.png';
 export { default as starEmpty } from '../../assets/images/star-empty-2.png';
+export { default as starFill } from '../../assets/images/star-fill.png';
+export { default as starOutline } from '../../assets/images/star-outline.png';
+export { default as infoIcon } from '../../assets/images/info.png';
+
+export { default as kettle3 } from '../../assets/images/kettle3.jpg';
