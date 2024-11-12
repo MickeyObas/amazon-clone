@@ -135,5 +135,8 @@ export { default as starEmpty } from '../../assets/images/star-empty-2.png';
 export { default as starFill } from '../../assets/images/star-fill.png';
 export { default as starOutline } from '../../assets/images/star-outline.png';
 export { default as infoIcon } from '../../assets/images/info.png';
+export { default as locationIcon } from '../../assets/images/location1.png';
+export { default as primeIcon } from '../../assets/images/prime.png';
 
 export { default as kettle3 } from '../../assets/images/kettle3.jpg';
+export { default as toaster } from '../../assets/images/toaster.jpg';
