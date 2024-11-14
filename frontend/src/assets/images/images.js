@@ -140,3 +140,11 @@ export { default as primeIcon } from '../../assets/images/prime.png';
 
 export { default as kettle3 } from '../../assets/images/kettle3.jpg';
 export { default as toaster } from '../../assets/images/toaster.jpg';
+
+export { default as ri_1 } from '../../assets/images/ri-1.jpg';
+export { default as ri_2 } from '../../assets/images/ri-2.jpg';
+export { default as ri_3 } from '../../assets/images/ri-3.jpg';
+export { default as ri_4 } from '../../assets/images/ri-4.jpg';
+export { default as ri_5 } from '../../assets/images/ri-5.jpg';
+
+export { default as user } from '../../assets/images/user.png';
