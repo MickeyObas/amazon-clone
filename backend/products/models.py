@@ -9,15 +9,17 @@ class Product(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=1)
     quantity_in_stock = models.IntegerField()
     category = models.ForeignKey('categories.Category', related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
-    extra_attributes = models.JSONField(blank=True, null=True)
+    avg_rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    rating_count = models.PositiveIntegerField(default=0)
     # Physical attributes(Color, size, etc)
+    extra_attributes = models.JSONField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.category}: {self.title}"
 
 
 class ProductImage(models.Model):
-    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='product_images/')
     alt_text = models.CharField(max_length=100, null=True, blank=True)
 
