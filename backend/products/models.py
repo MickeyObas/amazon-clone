@@ -25,3 +25,13 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image for {self.product.title}"
+    
+
+class ProductHighlight(models.Model):
+    product = models.ForeignKey(Product, related_name='highlights', on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, blank=True, null=True) 
+    description = models.TextField()  # Required
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ['order'] 

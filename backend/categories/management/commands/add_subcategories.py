@@ -17,6 +17,7 @@ class Command(BaseCommand):
 
 
         main_sub_category_map = {
+            # Main ==> Sub
             "Arts & Crafts": [
                 "Painting, Drawing & Art Supplies",
                 "Beading & Jewelry Making",
@@ -87,7 +88,7 @@ class Command(BaseCommand):
                 "Handbags",
                 "Accessories"
             ],
-            "Mens' Fashion": [
+            "Men's Fashion": [
                 "Clothing",
                 "Shoes",
                 "Watches",
@@ -244,7 +245,7 @@ class Command(BaseCommand):
                 "Dolls & Accessories",
                 "Dress Up & Pretend Play",
                 "Kids' Electronics",
-                "Games",'
+                "Games",
                 "Grown-Up Toys",
                 "Hobbies",
                 "Kids' Furniture, Decor & Storage",
@@ -278,16 +279,24 @@ class Command(BaseCommand):
                 "Accessories",
                 "Digital Games",
                 "Kids & Family"
-            ]
+            ],
         }
 
 
-        for key, value in main_sub_category_map:
-            for sub_value in value:
-                parent_category = Category.objects.get(title=key)
-                Category.objects.get_or_create(
-                    title=sub_value,
-                    parent=parent_category
+        try:
+            for key, value in main_sub_category_map.items():
+                parent_category, created = Category.objects.get_or_create(
+                    title=key,
+                    parent=None
                     )
+                for sub_value in value:
+                    Category.objects.get_or_create(
+                        title=sub_value,
+                        parent_id=parent_category.id,
+                        )
+            self.stdout.write(self.style.SUCCESS('Categories added successfully'))
+        except Exception as e:
+            print(e)
+            print(key, value, parent_category, sep="\n\n")
         
-        self.stdout.write(self.style.SUCCESS('Categories added successfully'))
+        
