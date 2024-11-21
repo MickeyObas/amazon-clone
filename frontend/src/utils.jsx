@@ -60,3 +60,11 @@ export default function ProtectedRoutes(){
         <Navigate to='/login' state={{ from: location }} replace />
     )
 }
+
+export const getMoneyParts = (moneyString) => {
+    const [integer, decimal] = moneyString.split(".");
+    return {
+        integerPart: parseInt(integer, 10),
+        decimalPart: decimal ? parseInt(decimal, 10) : 0
+    }
+}

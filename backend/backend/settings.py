@@ -146,10 +146,13 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.1/howto/static-files/
+STATIC_URL = '/static/'  
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 
-STATIC_URL = 'static/'
+# Media files settings
+MEDIA_URL = '/media/'  # Public URL for accessing media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Absolute filesystem path for storing media files
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

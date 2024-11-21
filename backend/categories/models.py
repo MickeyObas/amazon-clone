@@ -10,7 +10,7 @@ class Category(models.Model):
         ordering = ['title']
 
     def __str__(self):
-        return f"Parent: {self.parent.title if self.parent else None} ==> Self: {self.title}" 
+        return f"Parent: {self.parent.title if self.parent else None} ==> {self.title}" 
     
 
 class CategoryAttribute(models.Model):
@@ -21,7 +21,3 @@ class CategoryAttribute(models.Model):
         return f"{self.category.title} - {self.title}"
 
 
-class ProductAttributeValue(models.Model):
-    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
-    attribute = models.ForeignKey(CategoryAttribute, on_delete=models.CASCADE)
-    value = models.TextField()

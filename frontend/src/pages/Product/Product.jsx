@@ -1,20 +1,48 @@
 import { starFill, kettle3, downIcon, infoIcon, locationIcon, primeIcon, toaster, ri_1, ri_2, ri_3, ri_4, ri_5, user } from "../../assets/images/images";
+
 import StarRating from "../../components/StarRating";
+import { fetchWithAuth, getMoneyParts } from "../../utils";
 
 // Temporary imports till refactor
 import { useState, useEffect, useRef } from 'react';
+import { useParams } from "react-router-dom";
 import PropTypes from 'prop-types';
+
 
 import leftArrow from '../../assets/images/left-arrow.png';
 import rightArrow from '../../assets/images/right-arrow.png';
 
 export default function Product(){
+    const { id } = useParams();
 
     // #TODO: Refactor and fix panel carousel
     const panelCarouselDivRef = useRef(null);
     const [isLeftButtonDim, setIsLeftButtonDim] = useState(true);
     const [isRightButtonDim, setIsRightButtonDim] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+
+    const [product, setProduct] = useState({});
+    const { integerPart, decimalPart } = getMoneyParts(product?.price || "0");
+
+    useEffect(() => {
+        const fetchProduct = async () => {
+            try {
+                const response = await fetchWithAuth(`http://localhost:8000/api/products/${id}`);
+                if (response.ok){
+                    const data = await response.json();
+                    setProduct(data);
+                    console.log(data);
+                } else{
+                    console.log("Product not fetched");
+                }
+            } catch(err) {
+                console.log("Whoops", err)
+            }
+        };
+
+        fetchProduct();
+        
+    }, [id]);
 
     const handleLeftButtonClick = () => {
         if (panelCarouselDivRef.current) {
@@ -52,10 +80,10 @@ export default function Product(){
             <div className="heading-panel flex py-2 px-10 items-center border-b border-b-slate-300">
                 <div className="logo me-28 font-bold text-lg">Logo</div>
                 <div className="short-description font-medium text-sm me-28">
-                    1.8 Liter Electric Glass Kettle Hot Water Boiler, BPA-Free, 1500W
+                    {product.title}
                 </div>
                 <div className="rating flex gap-x-1 me-10">
-                    <span className="text-xs">4.1</span>
+                    <span className="text-xs">{product.rating}</span>
                     <div className="flex me-[1px]">
                         <img src={starFill} alt="" className="h-[15px]"/>
                         <img src={starFill} alt="" className="h-[15px]"/>
@@ -63,49 +91,49 @@ export default function Product(){
                         <img src={starFill} alt="" className="h-[15px]"/>
                         <img src={starFill} alt="" className="h-[15px]"/>
                     </div>
-                    <span className="text-[11px] self-start text-slate-500">131</span>
+                    <span className="text-[11px] self-start text-slate-500">{product.rating_count}</span>
                 </div>
                 <div className="pricing flex items-center">
                     <span className="percent-off text-2xl text-red-600 me-2">-20%</span>
                     <span className="">
                         <div className='flex items-top font-medium text-lg text-red-600 me-1'>
                             <span className='block text-sm leading-[1.4] me-[1px]'>$</span>
-                            <span className='block text-[24px] leading-[1]'>39</span>
-                            <span className='block text-xs me-0.5 font-normal'>99</span>
+                            <span className='block text-[24px] leading-[1]'>{integerPart}</span>
+                            <span className='block text-xs me-0.5 font-normal'>{decimalPart}</span>
                         </div>
                     </span>
-                    <span className="self-end text-sm text-slate-600 line-through">$49.99</span>
+                    <span className="self-end text-sm text-slate-600 line-through">${product.price}</span>
                 </div>
                 <div className="product-picture h-10 flex items-center ms-auto">
-                    <img src={kettle3} alt="" className="max-h-full"/>
+                    <img src={product.picture} alt="" className="max-h-full"/>
                 </div>
             </div>
             <div className="content grid grid-cols-12 py-10 px-3">
                 <div className="col-span-5 flex flex-col ms-20 items-center sticky top-5 max-h-screen">
                     <div className="img-container h-96">
-                        <img src={kettle3} alt="" className="h-full"/>
+                        <img src={product.picture} alt="" className="h-full"/>
                     </div>
                     <div className="my-3 text-sm text-slate-500 font-medium">Roll over image to zoom in</div>
                     <div className="image-switch flex gap-x-2">
                         <div className="img-container w-24 rounded-lg border border-slate-300 flex items-center justify-center py-4 px-1">
-                            <img src={kettle3} alt="" className="max-w-20"/>
+                            <img src={product.picture} alt="" className="max-w-20"/>
                         </div>
                         <div className="img-container w-24 rounded-lg border border-slate-300 flex items-center justify-center">
-                            <img src={kettle3} alt="" className="max-w-20"/>
+                            <img src={product.picture} alt="" className="max-w-20"/>
                         </div>
                         <div className="img-container w-24 rounded-lg border border-slate-300 flex items-center justify-center">
-                            <img src={kettle3} alt="" className="max-w-20"/>
+                            <img src={product.picture} alt="" className="max-w-20"/>
                         </div>
                         <div className="img-container w-24 rounded-lg border border-slate-300 flex items-center justify-center">
-                            <img src={kettle3} alt="" className="max-w-20"/>
+                            <img src={product.picture} alt="" className="max-w-20"/>
                         </div>
                     </div>
                 </div>
                 <div className="col-span-4 product-info col ms-10 flex flex-col">
-                    <h1 className="font-medium text-2xl mb-1">OVENTE Electric Glass Kettle Hot Water Boiler 1.8 Liter BPA Free - 1500W w/Stainless Steel Infuser, Set Temperature Control, Auto Shut Off, Portable Fast Instant Heater for Coffee & Tea - KG661S</h1>
+                    <h1 className="font-medium text-2xl mb-1">{product.description}</h1>
                     <div className="text-sm text-slate-500 mb-1">Visit the OVENTE store</div>
                     <div className="rating flex items-center mb-1">
-                        <span className="text-sm me-2">4.1</span>
+                        <span className="text-sm me-2">{product.avg_rating}</span>
                         <div className="flex me-1.5">
                             <img src={starFill} alt="" className="h-[15px]"/>
                             <img src={starFill} alt="" className="h-[15px]"/>
@@ -114,7 +142,7 @@ export default function Product(){
                             <img src={starFill} alt="" className="h-[15px]"/>
                         </div>
                         <img src={downIcon} alt="" className="h-3"/>
-                        <span className="text-sm text-slate-500 ms-5">131 ratings</span>
+                        <span className="text-sm text-slate-500 ms-5">{product.rating_count} ratings</span>
                     </div>
                     <div className="text-sm">800+ bought in the last month</div>
                     <hr className="mt-1.5 mb-4 border-slate-300"/>
@@ -123,12 +151,12 @@ export default function Product(){
                         <span className="">
                             <div className='flex items-top font-medium text-lg  me-1'>
                                 <span className='block text-sm leading-[1.4] me-[1px]'>$</span>
-                                <span className='block text-[24px] leading-[1]'>39</span>
-                                <span className='block text-xs me-0.5 font-normal'>99</span>
+                                <span className='block text-[24px] leading-[1]'>{integerPart}</span>
+                                <span className='block text-xs me-0.5 font-normal'>{decimalPart}</span>
                             </div>
                         </span>
                     </div>
-                    <div className="text-xs text-slate-500">List price: <span className="line-through">$49.99</span></div>
+                    <div className="text-xs text-slate-500">List price: <span className="line-through">$72.99</span></div>
                     <div className="flex items-center mt-2.5">
                         <div className="text-sm text-slate-500 me-1.5">$63.48 Shipping & Import Fees Deposit to Nigeria Details</div>
                         <img src={downIcon} alt="" className="h-2.5"/>
@@ -139,57 +167,24 @@ export default function Product(){
                     </div>
                     <table className="product-info-list w-3/4 mt-2 table-fixed">
                         <tbody className="text-sm">
-                            <tr className="">
-                                <td className="font-semibold py-0.5 w-2/5">Brand</td>
-                                <td className="">Toastmater</td>
+                            {product.attributes && product.attributes.map((attribute, idx) => (
+                            <tr className="" key={idx}>
+                                <td className="font-semibold py-0.5 w-[55%]">{attribute.attribute}</td>
+                                <td className="">{attribute.value}</td>
                             </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Color</td>
-                                <td className="">Graphite</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Material</td>
-                                <td className="">Glass</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Product Dimensions</td>
-                                <td className="">9.59"D x 14.27"W x 9.67"H</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Capacity</td>
-                                <td className="">4 Quarts</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Wattage</td>
-                                <td className="">260 watts</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Item Weight</td>
-                                <td className>9.2 Pounds</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Voltage</td>
-                                <td className>120 Volts</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Shape</td>
-                                <td className>Oval</td>
-                            </tr>
-                            <tr className="">
-                                <td className="font-semibold py-0.5">Pattern</td>
-                                <td className>Solid</td>
-                            </tr>
+                            ))}
                         </tbody>
                     </table>
                     <hr className="mt-2 mb-3 border-slate-300"/>
                     <div className="about flex flex-col">
                         <h2 className="font-bold text-[17px] mb-1">About this item</h2>
                         <ul className="text-sm list-disc ps-5 flex flex-col gap-y-2">
-                            <li>4-QUART CAPACITY is large enough for a family or group.</li>
-                            <li>INTEGRATED LID LATCH: The sliding latch in the handle connects the stoneware insert and the glass lid for convenient transporting and serving.</li>
-                            <li>SLIM PROFILE CONTROLS: Set preferred cooking time from 30 minutes up to 10 hours and select from LOW or HIGH heat settings with the digital control.</li>
-                            <li>AUTOMATIC KEEP WARM: When the cooking cycle is complete, the slow cooker will automatically shift to WARM for an additional 6 hours.</li>
-                            <li>120 volt, 160 watts, 2 pin polarized plug, Household Use</li>
+                            {product.highlights && product.highlights.map((highlight, idx) => (
+                                <li key={idx}>{highlight.title ? 
+                                    highlight.title + ": " : 
+                                    ""
+                                }{highlight.description}</li>
+                            ))}
                         </ul>
                     </div>
                 </div>
@@ -198,8 +193,8 @@ export default function Product(){
                         <span className="mb-4">
                             <div className='flex items-top font-medium text-lg  me-1'>
                                 <span className='block text-sm leading-[1.4] me-[1px]'>$</span>
-                                <span className='block text-3xl leading-[1]'>39</span>
-                                <span className='block text-xs me-0.5 font-normal'>99</span>
+                                <span className='block text-3xl leading-[1]'>{integerPart}</span>
+                                <span className='block text-xs me-0.5 font-normal'>{decimalPart}</span>
                             </div>
                         </span>
                         <span className="text-slate-600 text-sm">$100.35 Shipping & Import Fees</span>
@@ -297,53 +292,15 @@ export default function Product(){
             <hr className="mb-1 mx-3.5 border-slate-300"/>
             <div className="product-information px-3.5 py-6">
                 <h2 className="text-2xl font-semibold mb-4">Product information</h2>
-                <div className="grid grid-cols-2 py-2 ps-3.5 gap-x-10">
+                <div className="grid grid-cols-2 py-7 ps-3.5 gap-x-10">
                     <table className="table-fixed">
                         <tbody>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5 w-1/2">Brand</td>
-                                <td className="py-1.5">NELO</td>
+                            {product.attributes && product.attributes.map((attribute, idx) => (
+                            <tr key={idx} className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
+                                <td className="font-semibold py-1.5 w-1/2">{attribute.attribute}</td>
+                                <td className="py-1.5">{attribute.value}</td>
                             </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Color</td>
-                                <td className="py-1.5">Transparent</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Special feature</td>
-                                <td className="py-1.5">Indicator Light, Temperature Control, Boil Dry Protection, Rapid Boil, Automatic Shut-Off</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Package Information</td>
-                                <td className="py-1.5">Glass</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Finish Type</td>
-                                <td className="py-1.5">Glass, Stainless Style</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Product Dimensions</td>
-                                <td className="py-1.5">8.23"L x 6.18"W x 9.37"H</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Included components</td>
-                                <td className="py-1.5">User Guide</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Material Feature</td>
-                                <td className="py-1.5">Durable, Rust-Resistant, and Cool-Touch</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Recommended Uses For Product</td>
-                                <td className="py-1.5">Heating water for hot beverages, soup, noodles, and oatmeal</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">ASIN</td>
-                                <td className="py-1.5">B0DB3NQQWP</td>
-                            </tr>
-                            <tr className="text-sm border border-t-0 border-r-0 border-l-0 border-b-slate-300">
-                                <td className="font-semibold py-1.5">Date First Available</td>
-                                <td className="py-1.5">July 21, 2024</td>
-                            </tr>
+                            ))}
                         </tbody>
                     </table>
                     <div>

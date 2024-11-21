@@ -3,7 +3,7 @@ from django.db import models
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
-    picture = models.ImageField()
+    picture = models.ImageField(upload_to='product_images')
     description = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     rating = models.DecimalField(max_digits=3, decimal_places=1)
@@ -16,6 +16,18 @@ class Product(models.Model):
 
     def __str__(self):
         return f"{self.category}: {self.title}"
+
+
+class ProductAttributeValue(models.Model):
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE, related_name='attributes')
+    attribute = models.ForeignKey('categories.CategoryAttribute', on_delete=models.CASCADE)
+    value = models.TextField()
+
+    class Meta:
+        unique_together = ['product', 'attribute']
+
+    def __str__(self):
+        return f"{self.attribute.title}: {self.value}"
 
 
 class ProductImage(models.Model):
@@ -35,3 +47,7 @@ class ProductHighlight(models.Model):
 
     class Meta:
         ordering = ['order'] 
+        
+
+    def __str__(self):
+        return f"{self.title + ": " if self.title else ""}{self.description[:30]}"

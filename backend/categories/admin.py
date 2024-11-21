@@ -4,5 +4,8 @@ from . models import Category, CategoryAttribute
 class CategoryModelAdmin(admin.ModelAdmin):
     pass
 
+class CategoryAttributeModelAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(Category, CategoryModelAdmin)
-admin.site.register(CategoryAttribute)
+admin.site.register(CategoryAttribute, CategoryAttributeModelAdmin)
