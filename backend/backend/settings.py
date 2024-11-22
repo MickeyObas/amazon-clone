@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'categories.apps.CategoriesConfig',
     'products.apps.ProductsConfig',
+    'ratings.apps.RatingsConfig',
     # External Apps
     'corsheaders'
 ]

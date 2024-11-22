@@ -32,7 +32,6 @@ export default function PanelCarousel({
         const handleScroll = () => {
             if(panelCarouselDivRef.current){
                 const {scrollLeft, clientWidth, scrollWidth} = panelCarouselDivRef.current;
-                console.log(`${scrollLeft} + ${clientWidth} = ${scrollLeft+clientWidth} ? ${scrollWidth}`);
                 setIsLeftButtonDim(scrollLeft === 0);
                 setIsRightButtonDim((scrollLeft + clientWidth) >= scrollWidth);
             }

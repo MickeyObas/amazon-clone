@@ -10,11 +10,9 @@ import { products } from '../../products';
 export default function Results(){
 
     const [sliderValue, setSliderValue] = useState([0, 2000]);
-    console.log(groupProducts(products));
 
     const handleSliderChange = (newValue) => {
         setSliderValue(newValue);
-        console.log(newValue);
     }
 
     return (

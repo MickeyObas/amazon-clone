@@ -31,13 +31,17 @@ class ProductSerializer(serializers.ModelSerializer):
     attributes = ProductAttributesSerializer(many=True, read_only=True)
     highlights = ProductHighlightSerializer(many=True, read_only=True)
     picture = serializers.SerializerMethodField(read_only=True)
+    star_ratings = serializers.SerializerMethodField(read_only=True)
 
     def get_picture(self, obj):
         request = self.context.get('request')
         if obj.picture:
             return request.build_absolute_uri(obj.picture.url)
         return None
-
+    
+    def get_star_ratings(self, obj):
+        return obj.get_star_ratings()
+    
     class Meta:
         model = Product
         fields = [
@@ -53,7 +57,8 @@ class ProductSerializer(serializers.ModelSerializer):
             "rating_count",
             "extra_attributes",
             "category",
-            "highlights"
+            "highlights",
+            "star_ratings"
         ]
 
 

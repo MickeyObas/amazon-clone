@@ -68,3 +68,12 @@ export const getMoneyParts = (moneyString) => {
         decimalPart: decimal ? parseInt(decimal, 10) : 0
     }
 }
+
+export const formatDate = (isoDate) => {
+    const date = new Date(isoDate);
+    return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+    });
+}

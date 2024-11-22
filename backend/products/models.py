@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Count
 
 
 class Product(models.Model):
@@ -13,6 +14,21 @@ class Product(models.Model):
     rating_count = models.PositiveIntegerField(default=0)
     # Physical attributes(Color, size, etc)
     extra_attributes = models.JSONField(blank=True, null=True)
+
+    def get_star_ratings(self):
+        
+        ratings = (
+            self.ratings.values('rating') 
+            .annotate(count=Count('id'))  
+        )
+
+        ratings_total = self.ratings.count()
+        
+        ratings_dict = {star: 0 for star in range(1, 6)}
+        for entry in ratings:
+            ratings_dict[entry['rating']] = round((entry['count'] /ratings_total) * 100)
+        
+        return ratings_dict
 
     def __str__(self):
         return f"{self.category}: {self.title}"

@@ -86,7 +86,6 @@ export default function Register(){
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         if(validateForm()){
-            console.log("Form's all good!");
             confirmPasswordInputRef.current.blur();
 
             try {
@@ -103,7 +102,6 @@ export default function Register(){
                 });
 
                 if(response.ok){
-                    console.log("Fetch executed successfully");
                     navigate('/login');
                 }else{
                     console.log("Oops the fetch request failed for some reason")
@@ -131,7 +129,6 @@ export default function Register(){
     const handleKeyDown = (e, nextRef) => {
         if(e.key == 'Enter'){
             e.preventDefault();
-            console.log("Enter clicked")
             nextRef.current.focus();
         }
     }

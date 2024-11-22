@@ -1,16 +1,18 @@
-import { starFill, kettle3, downIcon, infoIcon, locationIcon, primeIcon, toaster, ri_1, ri_2, ri_3, ri_4, ri_5, user } from "../../assets/images/images";
+import { starFill, downIcon, infoIcon, locationIcon, primeIcon, toaster, ri_1, ri_2, ri_3, ri_4, ri_5 } from "../../assets/images/images";
 
-import StarRating from "../../components/StarRating";
+import ProductRating from "../../components/ProductRating";
 import { fetchWithAuth, getMoneyParts } from "../../utils";
 
 // Temporary imports till refactor
 import { useState, useEffect, useRef } from 'react';
-import { useParams } from "react-router-dom";
+import { resolvePath, useParams } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 
 import leftArrow from '../../assets/images/left-arrow.png';
 import rightArrow from '../../assets/images/right-arrow.png';
+import ProductRatingsContainer from "../../components/ProductRatingsContainer";
+import ProductReviewsContainer from "../../components/ProductReviewsContainer";
 
 export default function Product(){
     const { id } = useParams();
@@ -22,6 +24,7 @@ export default function Product(){
     const [isHovered, setIsHovered] = useState(false);
 
     const [product, setProduct] = useState({});
+    const [reviews, setReviews] = useState([]);
     const { integerPart, decimalPart } = getMoneyParts(product?.price || "0");
 
     useEffect(() => {
@@ -31,7 +34,6 @@ export default function Product(){
                 if (response.ok){
                     const data = await response.json();
                     setProduct(data);
-                    console.log(data);
                 } else{
                     console.log("Product not fetched");
                 }
@@ -43,6 +45,24 @@ export default function Product(){
         fetchProduct();
         
     }, [id]);
+
+    useEffect(() => {
+        const fetchReviews = async () => {
+            try{
+                const response = await fetchWithAuth(`http://localhost:8000/api/products/${id}/ratings/`);
+                if(response.ok){
+                    const data = await response.json();
+                    setReviews(data);
+                } else{
+                    console.log("Response is not okay");
+                }
+            } catch(err){
+                console.log("Error: ", err);
+            }
+        };
+
+        fetchReviews();
+    }, [])
 
     const handleLeftButtonClick = () => {
         if (panelCarouselDivRef.current) {
@@ -60,7 +80,6 @@ export default function Product(){
         const handleScroll = () => {
             if(panelCarouselDivRef.current){
                 const {scrollLeft, clientWidth, scrollWidth} = panelCarouselDivRef.current;
-                console.log(`${scrollLeft} + ${clientWidth} = ${scrollLeft+clientWidth} ? ${scrollWidth}`);
                 setIsLeftButtonDim(scrollLeft === 0);
                 setIsRightButtonDim((scrollLeft + clientWidth) >= scrollWidth);
             }
@@ -72,7 +91,7 @@ export default function Product(){
         return () => panelCarouselDivCurrent.removeEventListener('scroll', handleScroll);
       }, [])
 
-      const images = [ri_1, ri_2, ri_3, ri_4, ri_5, ri_1, ri_2, ri_3, ri_4, ri_5];
+      const images = Array(8).fill(product.picture);
 
 
     return (
@@ -83,14 +102,12 @@ export default function Product(){
                     {product.title}
                 </div>
                 <div className="rating flex gap-x-1 me-10">
-                    <span className="text-xs">{product.rating}</span>
-                    <div className="flex me-[1px]">
-                        <img src={starFill} alt="" className="h-[15px]"/>
-                        <img src={starFill} alt="" className="h-[15px]"/>
-                        <img src={starFill} alt="" className="h-[15px]"/>
-                        <img src={starFill} alt="" className="h-[15px]"/>
-                        <img src={starFill} alt="" className="h-[15px]"/>
-                    </div>
+                    <span className="text-xs">{product.avg_rating}</span>
+                    {product.avg_rating && <ProductRating 
+                        className={'me-1'}
+                        starHeight={'15px'}
+                        avgRating={product.avg_rating}
+                    />}
                     <span className="text-[11px] self-start text-slate-500">{product.rating_count}</span>
                 </div>
                 <div className="pricing flex items-center">
@@ -134,13 +151,11 @@ export default function Product(){
                     <div className="text-sm text-slate-500 mb-1">Visit the OVENTE store</div>
                     <div className="rating flex items-center mb-1">
                         <span className="text-sm me-2">{product.avg_rating}</span>
-                        <div className="flex me-1.5">
-                            <img src={starFill} alt="" className="h-[15px]"/>
-                            <img src={starFill} alt="" className="h-[15px]"/>
-                            <img src={starFill} alt="" className="h-[15px]"/>
-                            <img src={starFill} alt="" className="h-[15px]"/>
-                            <img src={starFill} alt="" className="h-[15px]"/>
-                        </div>
+                        {product.avg_rating && <ProductRating 
+                        className={'me-1'}
+                        starHeight={'15px'}
+                        avgRating={product.avg_rating}
+                    />}
                         <img src={downIcon} alt="" className="h-3"/>
                         <span className="text-sm text-slate-500 ms-5">{product.rating_count} ratings</span>
                     </div>
@@ -318,58 +333,15 @@ export default function Product(){
                 <div className="col-span-4 flex flex-col">
                     <h1 className="font-semibold text-2xl">Customer reviews</h1>
                     <div className="rating flex gap-x-1.5 items-center mt-1">
-                        <div className="flex">
-                            <img src={starFill} alt="" className="h-5"/>
-                            <img src={starFill} alt="" className="h-5"/>
-                            <img src={starFill} alt="" className="h-5"/>
-                            <img src={starFill} alt="" className="h-5"/>
-                            <img src={starFill} alt="" className="h-5"/>
-                        </div>
-                        <span className="font-medium">4.6 out of 5</span>
+                        {product.rating && <ProductRating 
+                            avgRating={product.avg_rating}
+                            starHeight={"16px"}
+                            />}
+                        <span className="font-medium">{product.avg_rating} out of 5</span>
                     </div>
-                    <span className="text-slate-700 text-sm mt-1.5">33 global ratings</span>
-                    <div className="ratings mt-4 flex  gap-y-3 flex-col">
-                        <div className="rating-container flex items-center gap-x-4">
-                            <span className="text-sm text-slate-500">5 star</span>
-                            <div className="rating-bar-container w-[220px] h-5 relative flex">
-                                <div className="rating-bar h-full bg-[#ff9d14] w-[70%] py-1 rounded-s-[4px]"></div>
-                                <div className="rating-bar-empty h-full flex-1 py-1 border-[1.5px] border-s-0 border-slate-400 rounded-e-[4px]"></div>
-                            </div>
-                            <span className="text-sm text-slate-500">70%</span>
-                        </div>
-                        <div className="rating-container flex items-center gap-x-4">
-                            <span className="text-sm text-slate-500">4 star</span>
-                            <div className="rating-bar-container w-[220px] h-5 relative flex">
-                                <div className="rating-bar h-full bg-[#ff9d14] w-[10%] py-1 rounded-s-[4px]"></div>
-                                <div className="rating-bar-empty h-full flex-1 py-1 border-[1.5px] border-s-0 border-slate-400 rounded-e-[4px]"></div>
-                            </div>
-                            <span className="text-sm text-slate-500">10%</span>
-                        </div>
-                        <div className="rating-container flex items-center gap-x-4">
-                            <span className="text-sm text-slate-500">3 star</span>
-                            <div className="rating-bar-container w-[220px] h-5 relative flex">
-                                <div className="rating-bar h-full bg-[#ff9d14] w-[5%] py-1 rounded-s-[4px]"></div>
-                                <div className="rating-bar-empty h-full flex-1 py-1 border-[1.5px] border-s-0 border-slate-400 rounded-e-[4px]"></div>
-                            </div>
-                            <span className="text-sm text-slate-500">5%</span>
-                        </div>
-                        <div className="rating-container flex items-center gap-x-4">
-                            <span className="text-sm text-slate-500">2 star</span>
-                            <div className="rating-bar-container w-[220px] h-5 relative flex">
-                                <div className="rating-bar h-full bg-[#ff9d14] w-[10%] py-1 rounded-s-[4px]"></div>
-                                <div className="rating-bar-empty h-full flex-1 py-1 border-[1.5px] border-s-0 border-slate-400 rounded-e-[4px]"></div>
-                            </div>
-                            <span className="text-sm text-slate-500">10%</span>
-                        </div>
-                        <div className="rating-container flex items-center gap-x-4">
-                            <span className="text-sm text-slate-500">1 star</span>
-                            <div className="rating-bar-container w-[220px] h-5 relative flex">
-                                <div className="rating-bar h-full bg-[#ff9d14] w-[5%] py-1 rounded-s-[4px]"></div>
-                                <div className="rating-bar-empty h-full flex-1 py-1 border-[1.5px] border-s-0 border-slate-400 rounded-e-[4px]"></div>
-                            </div>
-                            <span className="text-sm text-slate-500">5%</span>
-                        </div>
-                    </div>
+                    <span className="text-slate-700 text-sm mt-1.5">{product.rating_count} global ratings</span>
+                    {/* Ratings Container */}
+                    <ProductRatingsContainer ratings={product.star_ratings}/>
                     <hr className="mt-6 w-4/5 border-slate-300"/>
                     <div className="flex flex-col gap-y-3 py-4">
                         <h2 className="text-lg font-semibold">Review this product</h2>
@@ -413,191 +385,7 @@ export default function Product(){
                     </div>
                 </div>
                 <hr className="border-slate-300"/>
-                <div className="flex flex-col">
-                    <h2 className="font-semibold text-lg mt-3 mb-6">Top reviews from Konoha Village</h2>
-                    <div className="flex flex-col">
-                        <div className="review-container flex flex-col mb-7">
-                            <div className="flex items-center mb-1.5">
-                                <img src={user} alt="" className="h-8"/>
-                                <span className="text-[13px] ms-3.5">Uzumaki N.</span>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="flex me-3">
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                </div>
-                                <span className="font-semibold text-sm">
-                                    It automatically shuts off when heated
-                                </span>
-                            </div>
-                            <span className="text-sm text-slate-500 mb-1">Reviewed in Konoha Village on February 31, 2023</span>
-                            <span className="text-xs text-red-600 mb-1">Verified Purchase</span>
-                            <div className="review-text max-w-[70%] text-sm">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est tempore maxime repellendus sed quos. Harum beatae temporibus veritatis, culpa vitae atque deserunt voluptas aliquid dolorum cum iusto facere iste recusandae.
-                            <br /><br />
-                            Such a great product!<br/><br/>
-                            I wholly recommend!!!
-                            </div>
-                            <div className="flex flex-col mt-2">
-                                <div className="text-sm text-slate-500">
-                                    One person found this helpful
-                                </div>
-                                <div className="flex mt-2 items-center gap-x-4">
-                                    <button className="text-sm border border-slate-600  rounded-full px-6 py-1">Helpful</button>
-                                    <div className="h-3/5 w-[1px] bg-slate-300"></div>
-                                    <button className="text-sm text-slate-600  rounded-full py-1">Report</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="review-container flex flex-col mb-7">
-                            <div className="flex items-center mb-1.5">
-                                <img src={user} alt="" className="h-8"/>
-                                <span className="text-[13px] ms-3.5">Uzumaki N.</span>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="flex me-3">
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                </div>
-                                <span className="font-semibold text-sm">
-                                    It automatically shuts off when heated
-                                </span>
-                            </div>
-                            <span className="text-sm text-slate-500 mb-1">Reviewed in Konoha Village on February 31, 2023</span>
-                            <span className="text-xs text-red-600 mb-1">Verified Purchase</span>
-                            <div className="review-text max-w-[70%] text-sm">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est tempore maxime repellendus sed quos. Harum beatae temporibus veritatis, culpa vitae atque deserunt voluptas aliquid dolorum cum iusto facere iste recusandae.
-                            <br /><br />
-                            Such a great product!<br/><br/>
-                            I wholly recommend!!!
-                            </div>
-                            <div className="flex flex-col mt-2">
-                                <div className="text-sm text-slate-500">
-                                    One person found this helpful
-                                </div>
-                                <div className="flex mt-2 items-center gap-x-4">
-                                    <button className="text-sm border border-slate-600  rounded-full px-6 py-1">Helpful</button>
-                                    <div className="h-3/5 w-[1px] bg-slate-300"></div>
-                                    <button className="text-sm text-slate-600  rounded-full py-1">Report</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="review-container flex flex-col mb-7">
-                            <div className="flex items-center mb-1.5">
-                                <img src={user} alt="" className="h-8"/>
-                                <span className="text-[13px] ms-3.5">Uzumaki N.</span>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="flex me-3">
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                </div>
-                                <span className="font-semibold text-sm">
-                                    It automatically shuts off when heated
-                                </span>
-                            </div>
-                            <span className="text-sm text-slate-500 mb-1">Reviewed in Konoha Village on February 31, 2023</span>
-                            <span className="text-xs text-red-600 mb-1">Verified Purchase</span>
-                            <div className="review-text max-w-[70%] text-sm">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est tempore maxime repellendus sed quos. Harum beatae temporibus veritatis, culpa vitae atque deserunt voluptas aliquid dolorum cum iusto facere iste recusandae.
-                            <br /><br />
-                            Such a great product!<br/><br/>
-                            I wholly recommend!!!
-                            </div>
-                            <div className="flex flex-col mt-2">
-                                <div className="text-sm text-slate-500">
-                                    One person found this helpful
-                                </div>
-                                <div className="flex mt-2 items-center gap-x-4">
-                                    <button className="text-sm border border-slate-600  rounded-full px-6 py-1">Helpful</button>
-                                    <div className="h-3/5 w-[1px] bg-slate-300"></div>
-                                    <button className="text-sm text-slate-600  rounded-full py-1">Report</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="review-container flex flex-col mb-7">
-                            <div className="flex items-center mb-1.5">
-                                <img src={user} alt="" className="h-8"/>
-                                <span className="text-[13px] ms-3.5">Uzumaki N.</span>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="flex me-3">
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                </div>
-                                <span className="font-semibold text-sm">
-                                    It automatically shuts off when heated
-                                </span>
-                            </div>
-                            <span className="text-sm text-slate-500 mb-1">Reviewed in Konoha Village on February 31, 2023</span>
-                            <span className="text-xs text-red-600 mb-1">Verified Purchase</span>
-                            <div className="review-text max-w-[70%] text-sm">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est tempore maxime repellendus sed quos. Harum beatae temporibus veritatis, culpa vitae atque deserunt voluptas aliquid dolorum cum iusto facere iste recusandae.
-                            <br /><br />
-                            Such a great product!<br/><br/>
-                            I wholly recommend!!!
-                            </div>
-                            <div className="flex flex-col mt-2">
-                                <div className="text-sm text-slate-500">
-                                    One person found this helpful
-                                </div>
-                                <div className="flex mt-2 items-center gap-x-4">
-                                    <button className="text-sm border border-slate-600  rounded-full px-6 py-1">Helpful</button>
-                                    <div className="h-3/5 w-[1px] bg-slate-300"></div>
-                                    <button className="text-sm text-slate-600  rounded-full py-1">Report</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="review-container flex flex-col mb-7">
-                            <div className="flex items-center mb-1.5">
-                                <img src={user} alt="" className="h-8"/>
-                                <span className="text-[13px] ms-3.5">Uzumaki N.</span>
-                            </div>
-                            <div className="flex items-center">
-                                <div className="flex me-3">
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                    <img src={starFill} alt="" className="h-3.5"/>
-                                </div>
-                                <span className="font-semibold text-sm">
-                                    It automatically shuts off when heated
-                                </span>
-                            </div>
-                            <span className="text-sm text-slate-500 mb-1">Reviewed in Konoha Village on February 31, 2023</span>
-                            <span className="text-xs text-red-600 mb-1">Verified Purchase</span>
-                            <div className="review-text max-w-[70%] text-sm">
-                            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Est tempore maxime repellendus sed quos. Harum beatae temporibus veritatis, culpa vitae atque deserunt voluptas aliquid dolorum cum iusto facere iste recusandae.
-                            <br /><br />
-                            Such a great product!<br/><br/>
-                            I wholly recommend!!!
-                            </div>
-                            <div className="flex flex-col mt-2">
-                                <div className="text-sm text-slate-500">
-                                    One person found this helpful
-                                </div>
-                                <div className="flex mt-2 items-center gap-x-4">
-                                    <button className="text-sm border border-slate-600  rounded-full px-6 py-1">Helpful</button>
-                                    <div className="h-3/5 w-[1px] bg-slate-300"></div>
-                                    <button className="text-sm text-slate-600  rounded-full py-1">Report</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ProductReviewsContainer reviews={reviews} />
                 </div>
             </div>
         </div>
