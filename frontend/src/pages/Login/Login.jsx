@@ -6,7 +6,7 @@ import { AmazonLogoBlack, warningIcon } from '../../assets/images/images';
 import exclamationMark from '../../assets/images/exclamation3.png';
 
 import { useContext } from 'react';
-import { AuthContext } from '../../AuthContext';
+import { AuthContext } from '../../context/AuthContext';
 
 const regexPatterns = {
     email: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,

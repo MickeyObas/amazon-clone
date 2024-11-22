@@ -7,14 +7,17 @@ import Home from './pages/Home/Home';
 import MainLayout from './layouts/MainLayout.jsx';
 import Results from './pages/Results/Results.jsx';
 import Product from './pages/Product/Product.jsx';
+import NotFound from './pages/NotFound/NotFound.jsx';
 
 import  ProtectedRoutes from './utils.jsx';
-import { AuthProvider } from './AuthContext.jsx';
+import { AuthProvider } from './context/AuthContext.jsx';
+import { CategoryProvider } from './context/CategoryContext.jsx';
 
 
 export default function App() {
   return (
    <AuthProvider>
+    <CategoryProvider>
       <Routes>
 
         {/* Protected Routes */}
@@ -29,8 +32,10 @@ export default function App() {
         {/* Public Routes */}
         <Route path='register' element={<Register />} />
         <Route path='login' element={<Login />} />
+        <Route path='*' element={<NotFound />} />
 
         </Routes>
+      </CategoryProvider>
     </AuthProvider>
     
   )

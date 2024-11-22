@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState, createContext } from 'react';
 
 import AmazonLogo from '../assets/images/amazon-white.png';
 import locationIcon from '../assets/images/location2.png';
@@ -8,13 +8,50 @@ import cartIcon from '../assets/images/trolley.png';
 import searchIcon from '../assets/images/search.png';
 import menuIcon from '../assets/images/menu1.png';
 
-import { AuthContext } from '../AuthContext';
+import { AuthContext } from '../context/AuthContext.jsx';
+import { useCategory } from '../context/CategoryContext.jsx';
+import { fetchWithAuth } from '../utils';
 
 
 export default function Header(){
 
     const { user } = useContext(AuthContext);
     const [searchIsFocused, setSearchIsFocused] = useState(false);
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+
+    const { selectedCategory, setSelectedCategory } = useCategory();    
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await fetchWithAuth('http://localhost:8000/api/categories/');
+                if(!response.ok){
+                    if(response.status === 404){
+                        setError(true);
+                    }else{
+                        console.log("Something went wrong");
+                    }
+                } else{
+                    const data = await response.json();
+                    setCategories(data);
+                }
+            } catch(err){
+                setError(true);
+                console.log("Error: ", err);
+            } finally{
+                setLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
+
+    const handleCategorySelect = (e) => {
+        console.log(e.target.value);
+        setSelectedCategory(e.target.value);
+    }
 
     return (
         <header className="flex flex-col">
@@ -31,8 +68,14 @@ export default function Header(){
                 </a>
                 <div 
                 className={`search-container h-[58%] w-6/12 me-5 flex ${searchIsFocused ? 'ring-4 ring-[#FFD814] rounded-[4px]' : ''}`}>
-                    <select className='w-[10%] rounded-s-[4px] text-xs font-medium p-2 hover:bg-slate-100  bg-slate-200 hover:cursor-pointer focus:outline-[#FFD814]'>
+                    <select 
+                        className='w-[22%] rounded-s-[4px] text-xs font-medium p-2 hover:bg-slate-100  bg-slate-200 hover:cursor-pointer focus:outline-[#FFD814]'
+                        onInput={handleCategorySelect}
+                        >
                         <option>All</option>
+                        {categories && categories.map((category, idx) => (
+                            <option key={idx} value={category.id}>{category.title}</option>
+                        ))}
                     </select>
                     <input 
                     type="text" 

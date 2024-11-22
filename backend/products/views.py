@@ -19,7 +19,7 @@ def product_detail(request, pk):
     try:
         product = Product.objects.get(id=pk)
         serializer = ProductSerializer(product, context={'request': request})
-    except product.DoesNotExist:
+    except Product.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     return Response(serializer.data)
 

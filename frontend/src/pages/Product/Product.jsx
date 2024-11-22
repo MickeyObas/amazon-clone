@@ -5,7 +5,7 @@ import { fetchWithAuth, getMoneyParts } from "../../utils";
 
 // Temporary imports till refactor
 import { useState, useEffect, useRef } from 'react';
-import { resolvePath, useParams } from "react-router-dom";
+import { resolvePath, useParams, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 
 
@@ -16,6 +16,7 @@ import ProductReviewsContainer from "../../components/ProductReviewsContainer";
 
 export default function Product(){
     const { id } = useParams();
+    const navigate = useNavigate();
 
     // #TODO: Refactor and fix panel carousel
     const panelCarouselDivRef = useRef(null);
@@ -25,20 +26,30 @@ export default function Product(){
 
     const [product, setProduct] = useState({});
     const [reviews, setReviews] = useState([]);
+    const [error, setError] = useState(false);
+    const [loading, setLoading] = useState(true);
+
     const { integerPart, decimalPart } = getMoneyParts(product?.price || "0");
 
     useEffect(() => {
         const fetchProduct = async () => {
             try {
                 const response = await fetchWithAuth(`http://localhost:8000/api/products/${id}`);
-                if (response.ok){
+                if (!response.ok){
+                    if(response.status === 404){
+                        setError(true);
+                    }else{
+                        throw new Error("Something went wrong.");
+                    }}
+                else {
                     const data = await response.json();
                     setProduct(data);
-                } else{
-                    console.log("Product not fetched");
                 }
             } catch(err) {
-                console.log("Whoops", err)
+                setError(true);
+                console.log("Error: ", err);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -85,14 +96,40 @@ export default function Product(){
             }
         }
 
+    
         const panelCarouselDivCurrent = panelCarouselDivRef.current;
+
+        if(!panelCarouselDivCurrent){
+            return;
+        }
+
         panelCarouselDivCurrent.addEventListener('scroll', handleScroll);
 
-        return () => panelCarouselDivCurrent.removeEventListener('scroll', handleScroll);
+        return () => {
+            if(panelCarouselDivCurrent){
+                panelCarouselDivCurrent.removeEventListener('scroll', handleScroll);
+            }
+        }
       }, [])
 
       const images = Array(8).fill(product.picture);
 
+    if (loading) return <h1>Loading</h1>  
+
+    if (error) {
+        return (
+            <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
+              <h1 className="text-2xl font-bold text-red-600">Resource Not Found</h1>
+              <p className="text-gray-700">The product you are looking for does not exist.</p>
+              <button
+                onClick={() => navigate('/')}
+                className="mt-4 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700"
+              >
+                Go Back to Homepage
+              </button>
+            </div>
+          );
+    }
 
     return (
         <div className="">

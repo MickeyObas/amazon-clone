@@ -7,10 +7,10 @@ class Product(models.Model):
     picture = models.ImageField(upload_to='product_images')
     description = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    rating = models.DecimalField(max_digits=3, decimal_places=1)
+    rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
     quantity_in_stock = models.IntegerField()
     category = models.ForeignKey('categories.Category', related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
-    avg_rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0)
+    avg_rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0, blank=True, null=True)
     rating_count = models.PositiveIntegerField(default=0)
     # Physical attributes(Color, size, etc)
     extra_attributes = models.JSONField(blank=True, null=True)
@@ -43,7 +43,7 @@ class ProductAttributeValue(models.Model):
         unique_together = ['product', 'attribute']
 
     def __str__(self):
-        return f"{self.attribute.title}: {self.value}"
+        return f"Product ID: {self.product.id} {self.attribute.title}: {self.value}"
 
 
 class ProductImage(models.Model):
