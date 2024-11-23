@@ -1,4 +1,5 @@
-import { useContext, useEffect, useState, createContext } from 'react';
+import { useContext, useEffect, useState, createContext} from 'react';
+import { json, useNavigate } from 'react-router-dom';
 
 import AmazonLogo from '../assets/images/amazon-white.png';
 import locationIcon from '../assets/images/location2.png';
@@ -20,8 +21,19 @@ export default function Header(){
     const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+    const navigate = useNavigate();
 
     const { selectedCategory, setSelectedCategory } = useCategory();    
+
+    let categoryTitle;
+    let categoryId;
+
+    if(selectedCategory){
+        categoryTitle = selectedCategory.split("-")[0];
+        categoryId = selectedCategory.split("-")[1];
+    }
+    const [searchCategory, setSearchCategory] = useState(categoryTitle || '');
+    const [searchQuery, setSearchQuery] = useState('');
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -49,14 +61,41 @@ export default function Header(){
     }, []);
 
     const handleCategorySelect = (e) => {
-        console.log(e.target.value);
-        setSelectedCategory(e.target.value);
+        const categoryId = (e.target.value);
+        if(categories){
+            const category = categories.find((category) => category.id.toString() === categoryId)
+            // Store category as 'title-id' string for varying uses
+            setSelectedCategory(`${category.title}-${category.id}`);
+            localStorage.setItem('selectedCategory', JSON.stringify(`${category.title}-${category.id}`))
+            setSearchCategory(category.title);
+        }
+    }
+
+    const handleSearchQueryChange = (e) => {
+        setSearchQuery(e.target.value);
+    }
+
+    const handleSearchButtonClick = () => {
+        if(!searchQuery && !searchCategory){
+            if(searchQuery !== ""){
+                return false;
+            }
+        }
+
+        const searchData = {
+            q: searchQuery || "",
+            c: searchCategory || ""
+        }
+
+        const searchParams = new URLSearchParams(searchData);
+        
+        navigate(`s/?${searchParams.toString()}`);
     }
 
     return (
         <header className="flex flex-col">
             <div className="top-menu flex h-16 px-6 items-center bg-slate-900">
-                <a><img src={AmazonLogo} className='w-[95px] mt-2 me-5'/></a>
+                <a href='/'><img src={AmazonLogo} className='w-[95px] mt-2 me-5'/></a>
                 <a className='me-5'>
                     <div className='top-menu-tab flex items-center'>
                         <img src={locationIcon} className='w-[15px] self-end'/>
@@ -71,20 +110,30 @@ export default function Header(){
                     <select 
                         className='w-[22%] rounded-s-[4px] text-xs font-medium p-2 hover:bg-slate-100  bg-slate-200 hover:cursor-pointer focus:outline-[#FFD814]'
                         onInput={handleCategorySelect}
+                        defaultValue={categoryId}
                         >
-                        <option>All</option>
+                        <option value="">All</option>
                         {categories && categories.map((category, idx) => (
-                            <option key={idx} value={category.id}>{category.title}</option>
+                            <option
+                                key={idx}
+                                value={category.id}
+                                selected={category.title === categoryTitle}
+                            >{category.title}</option>
                         ))}
                     </select>
                     <input 
-                    type="text" 
-                    className='h-full w-[83%] block border-none py-3 px-2 text-sm focus:outline-none'
-                    placeholder='Search Amazon'
-                    onFocus={() => setSearchIsFocused(true)}
-                    onBlur={() => setSearchIsFocused(false)}
+                        type="text" 
+                        className='h-full w-[83%] block border-none py-3 px-2 text-sm focus:outline-none'
+                        placeholder='Search Amazon'
+                        onFocus={() => setSearchIsFocused(true)}
+                        onBlur={() => setSearchIsFocused(false)}
+                        onChange={handleSearchQueryChange}
+                        value={searchQuery}
                     />
-                    <button className='w-[7%] rounded-e-[4px] bg-[#FFD814] flex items-center justify-center border-none outline-none'>
+                    <button 
+                        className='w-[7%] rounded-e-[4px] bg-[#FFD814] flex items-center justify-center border-none outline-none'
+                        onClick={handleSearchButtonClick}
+                        >
                         <img src={searchIcon} className='w-5'/>
                     </button>
                 </div>

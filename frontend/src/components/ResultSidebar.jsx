@@ -20,7 +20,9 @@ export default function ResultSidebar(){
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {
-                const response = await fetchWithAuth(`http://localhost:8000/api/categories/${selectedCategory}/`);
+                const categoryId = selectedCategory.split("-")[1];
+                console.log(categoryId);
+                const response = await fetchWithAuth(`http://localhost:8000/api/categories/${categoryId}/`);
                 if(!response.ok){
                     if(response.status === 404){
                         setError(true);
@@ -42,21 +44,18 @@ export default function ResultSidebar(){
         fetchCategoryData();
 
     }, [selectedCategory])
+
     
     return (
         <aside className="md:col-span-1">
         <div className="sidebar-inner flex flex-col gap-y-5">
             <div className="department flex flex-col">
                 <h2 className="font-bold text-sm mb-1.5">Department</h2>
-                <a href="" className="hover:text-red-600 text-sm mb-1">Kitchen & Dining</a>
-                <div className="flex flex-col ms-4 gap-y-[2px]">
-                    <a href="" className="hover:text-red-600 text-sm">Rice Cookers</a>
-                    <a href="" className="hover:text-red-600 text-sm">Pressure Cookers</a>
-                    <a href="" className="hover:text-red-600 text-sm">Electric Pressure Cookers</a>
-                    <a href="" className="hover:text-red-600 text-sm">Slow Cookers</a>
-                    <a href="" className="hover:text-red-600 text-sm">Electric Hot Pots</a>
-                    <a href="" className="hover:text-red-600 text-sm">Egg Cookers</a>
-                    <a href="" className="hover:text-red-600 text-sm">Sous Vide Machines</a>
+                <a href="" className="hover:text-red-600 text-sm mb-1">{categoryData.title || "All departments"}</a>
+                <div className="flex flex-col ms-4 gap-y-[2px] px-3">
+                    {categoryData.subcategories && categoryData.subcategories.map((subcategory, idx) => (
+                        <a key={idx} href="" className="hover:text-red-600 text-sm">{subcategory}</a>
+                    ))} 
                 </div>
             </div>
             <div className="reviews">

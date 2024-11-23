@@ -4,7 +4,7 @@ import ImageCarousel from '../../components/ImageCarousel';
 import PanelCarousel from '../../components/PanelCarousel';
 import ProductItemGrid from '../../components/ProductItemGrid';
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { AuthContext } from '../../context/AuthContext';
 
 import { 
@@ -45,6 +45,10 @@ import {
 export default function Home(){
 
     const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+        localStorage.removeItem('selectedCategory');
+    }, [])
 
     return (
         <div>

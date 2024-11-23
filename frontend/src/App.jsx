@@ -24,7 +24,7 @@ export default function App() {
         <Route element={<ProtectedRoutes />}>
           <Route path='/' element={<MainLayout />}>
             <Route index element={<Home />} />
-            <Route path='results' element={<Results />} />
+            <Route path='s/' element={<Results />} />
             <Route path='product/:id' element={<Product />} />
           </Route>
         </Route>

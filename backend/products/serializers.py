@@ -6,6 +6,8 @@ from .models import (
     ProductAttributeValue
 )
 
+from categories.serializers import CategorySerializer
+
 class ProductAttributesSerializer(serializers.ModelSerializer):
     attribute = serializers.SerializerMethodField()
 
@@ -32,6 +34,7 @@ class ProductSerializer(serializers.ModelSerializer):
     highlights = ProductHighlightSerializer(many=True, read_only=True)
     picture = serializers.SerializerMethodField(read_only=True)
     star_ratings = serializers.SerializerMethodField(read_only=True)
+    category = CategorySerializer()
 
     def get_picture(self, obj):
         request = self.context.get('request')

@@ -26,7 +26,17 @@ def product_detail(request, pk):
 
 @api_view(['GET'])
 def product_list(request):
+    query = request.query_params.get("q", "")
+    category = request.query_params.get("c", "")
+
     products = Product.objects.all()
+
+    if query:
+        products = products.filter(title__icontains=query)
+
+    if category:
+        products = products.filter(category__parent__title__icontains=category)
+
     serializer = ProductSerializer(products, many=True, context={'request': request})
     return Response(serializer.data)
 

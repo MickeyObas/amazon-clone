@@ -10,12 +10,13 @@ export default function ProductResultBox({
     priceMain,
     priceSub
 }){
+
     return (
         <div className="product-card w-[250px] border rounded-md flex flex-col">
             <div className="img-container h-[250px] flex items-center justify-center">
-                <img src={image} />
+                <img src={image} className='h-4/5'/>
             </div>
-            <div className="product-content border-t py-0.5 px-2 h-[325px] w-full">
+            <div className="product-content border-t py-4 px-2 min-h-[325px] w-full">
                 <a href="" className="text-xs text-blue-900 underline">+9 other colors/patterns</a>
                 <h1 className="max-w-[95%] font-medium mt-2">{description}</h1>
                 <div className="flex gap-1 items-center mt-2">
