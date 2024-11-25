@@ -52,14 +52,14 @@ export default function Results(){
     }, [location.search])
 
     return (
-        <div className="results-container">
+        <div className="results-container max-w-full">
             <div className="p-2 shadow-md border border-b-slate-300">
                 <h2 className="text-sm font-medium">1-48 of over 30,000 results for <span className="text-red-500">"{categoryTitle || q || "All"}"</span></h2>
             </div>
-            <div className="results-inner-container grid grid-cols-1 md:grid-cols-5 py-3 px-4">
+            <div className="results-inner-container grid grid-cols-1 md:grid-cols-5 py-3 px-4 max-w-full">
                 {/* Filters Sidebar */}
                 <ResultSidebar />
-                <div className="results-content md:col-span-4">
+                <div className="results-content md:col-span-4 max-w-full">
                     <h1 className="text-xl font-bold">Results</h1>
                     <p className="text-sm text-slate-600">Check each product page for other buying options. Price and other details may vary based on product size and color.</p>
                     {renderProducts(products)}
@@ -83,9 +83,9 @@ const renderProducts = (products) => {
     const rows = groupProducts(products);
 
     return (
-        <div className="inner-content py-1">
+        <div className="inner-content py-1 max-w-full">
             {rows.map((row, rowidx) => (
-                <div key={rowidx} className="row flex gap-2 mb-2">
+                <div key={rowidx} className="row flex items-stretch gap-2 mb-2">
                     {row.map((product, productidx) => (
                         <a key={productidx} href={`/product/${product.id}`}>
                         <ProductResultBox 

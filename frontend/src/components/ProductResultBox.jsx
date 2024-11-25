@@ -12,13 +12,13 @@ export default function ProductResultBox({
 }){
 
     return (
-        <div className="product-card w-[250px] border rounded-md flex flex-col">
+        <div className="product-card w-[240px] border rounded-md flex flex-col overflow-hidden">
             <div className="img-container h-[250px] flex items-center justify-center">
                 <img src={image} className='h-4/5'/>
             </div>
-            <div className="product-content border-t py-4 px-2 min-h-[325px] w-full">
+            <div className="product-content border-t py-4 px-2 h-[320px] w-full">
                 <a href="" className="text-xs text-blue-900 underline">+9 other colors/patterns</a>
-                <h1 className="max-w-[95%] font-medium mt-2">{description}</h1>
+                <h1 className="product-description font-medium mt-2">{description}</h1>
                 <div className="flex gap-1 items-center mt-2">
                     <StarRating />
                     <img src={downIcon} alt="" className="h-3"/>
@@ -35,7 +35,7 @@ export default function ProductResultBox({
                 </div>
                 <div className="text-sm mt-1.5">Delivery <span className="font-semibold">Wed, Nov 27</span></div>
                 <div className="text-xs mt-1">Ships to Nigeria</div>
-                <button className="bg-[#FFD814] py-2 px-3 rounded-full text-xs font-medium mt-2">Add to Cart</button>
+                {/* <button className="bg-[#FFD814] py-2 px-3 rounded-full text-xs font-medium mt-2">Add to Cart</button> */}
             </div>
         </div>
     )

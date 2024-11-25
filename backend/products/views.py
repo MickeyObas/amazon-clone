@@ -4,6 +4,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+from django.db.models import Q
+
 from .models import (
     Product,
     ProductHighlight
@@ -26,16 +28,18 @@ def product_detail(request, pk):
 
 @api_view(['GET'])
 def product_list(request):
-    query = request.query_params.get("q", "")
-    category = request.query_params.get("c", "")
+    query = request.query_params.get("q", "").strip()
+    category = request.query_params.get("c", "").strip()
 
-    products = Product.objects.all()
+    filters = Q()
 
     if query:
-        products = products.filter(title__icontains=query)
-
+        filters |= Q(title__icontains=query) | Q(description__icontains=query) | Q(category__title__icontains=query) | Q(attributes__value__icontains=query)
+    
     if category:
-        products = products.filter(category__parent__title__icontains=category)
+        filters |= Q(category__parent__title__iexact=category)
+
+    products = Product.objects.filter(filters).distinct()
 
     serializer = ProductSerializer(products, many=True, context={'request': request})
     return Response(serializer.data)

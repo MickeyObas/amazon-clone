@@ -7,6 +7,10 @@
   box-sizing: border-box;
 }
 
+html{
+  overflow-x: hidden;
+}
+
 .fancy-line { 
   border: 0; 
   height: 1px;
@@ -74,4 +78,13 @@ body, .fancy-line:after {
 
 #priceSlider .range-slider__range{
   background-color: rgb(24, 122, 122);
+}
+
+.product-description {
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 4;
+  line-height: 1.5em;
 }
