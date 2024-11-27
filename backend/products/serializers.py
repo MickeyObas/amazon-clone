@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from .models import (
+    Brand,
     Product,
     ProductHighlight,
     ProductAttributeValue
@@ -30,11 +31,15 @@ class ProductHighlightSerializer(serializers.ModelSerializer):
         ]
 
 class ProductSerializer(serializers.ModelSerializer):
+    brand = serializers.SerializerMethodField(read_only=True)
     attributes = ProductAttributesSerializer(many=True, read_only=True)
     highlights = ProductHighlightSerializer(many=True, read_only=True)
     picture = serializers.SerializerMethodField(read_only=True)
     star_ratings = serializers.SerializerMethodField(read_only=True)
     category = CategorySerializer()
+
+    def get_brand(self, obj):
+        return obj.brand.title if obj.brand else None
 
     def get_picture(self, obj):
         request = self.context.get('request')
@@ -49,6 +54,7 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = [
             "id",
+            "brand",
             "title",
             "attributes",
             "description",
@@ -65,5 +71,11 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
 
-
-
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Brand
+        fields = [
+            'title',
+            'logo',
+            'website'
+        ]

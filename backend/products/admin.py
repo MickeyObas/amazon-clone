@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from .models import (
+    Brand,
     Product, 
     ProductHighlight,
     ProductAttributeValue
@@ -16,6 +17,10 @@ class ProductHighlightModelAdmin(admin.ModelAdmin):
 class ProductAttributeModelAdmin(admin.ModelAdmin):
     pass
 
+class BrandModelAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(Brand, BrandModelAdmin)
 admin.site.register(Product, ProductModelAdmin)
 admin.site.register(ProductHighlight, ProductHighlightModelAdmin)
 admin.site.register(ProductAttributeValue, ProductAttributeModelAdmin)

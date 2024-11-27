@@ -3,6 +3,7 @@ from django.db.models import Count
 
 
 class Product(models.Model):
+    brand = models.ForeignKey('products.Brand', on_delete=models.SET_NULL, blank=True, null=True)
     title = models.CharField(max_length=255)
     picture = models.ImageField(upload_to='product_images')
     description = models.CharField(max_length=255)
@@ -67,3 +68,12 @@ class ProductHighlight(models.Model):
 
     def __str__(self):
         return f"{self.title + ": " if self.title else ""}{self.description[:30]}"
+    
+
+class Brand(models.Model):
+    title = models.CharField(max_length=255)
+    logo = models.ImageField(upload_to='brands/', blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+
+    def __str__(self):
+        return self.title

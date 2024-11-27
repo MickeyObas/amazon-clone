@@ -7,10 +7,12 @@ from rest_framework.decorators import api_view
 from django.db.models import Q
 
 from .models import (
+    Brand,
     Product,
     ProductHighlight
 )
 from .serializers import (
+    BrandSerializer,
     ProductSerializer,
     ProductHighlightSerializer
 )
@@ -54,3 +56,10 @@ def product_highlight_list(request, pk):
         return Response(serializer.data)
     except Product.DoesNotExist:
         return Response(f'Product with ID:{pk} does not exist', status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['GET'])
+def brand_list(request):
+    brands = Brand.objects.all()
+    serializer = BrandSerializer(brands, many=True)
+    return Response(serializer.data)
