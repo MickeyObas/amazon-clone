@@ -149,3 +149,4 @@ export { default as ri_4 } from '../../assets/images/ri-4.jpg';
 export { default as ri_5 } from '../../assets/images/ri-5.jpg';
 
 export { default as user } from '../../assets/images/user.png';
+export { default as noProducts } from '../../assets/images/rejected.png';

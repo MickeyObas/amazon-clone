@@ -5,8 +5,14 @@ import { starFull, starEmpty } from "../assets/images/images"
 import RangeSlider from 'react-range-slider-input';
 
 
-export default function ResultSidebar(){
-    const [sliderValue, setSliderValue] = useState([0, 2000]);
+export default function ResultSidebar({
+    brands,
+    selectedBrands,
+    handleBrandSelection,
+    handlePriceRangeSelection,
+    priceRange
+}){
+    const [sliderValue, setSliderValue] = useState([0, priceRange.max]);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
     const [categoryData, setCategoryData] = useState({});
@@ -17,11 +23,12 @@ export default function ResultSidebar(){
 
     const { selectedCategory } = useCategory();
 
+    console.log(priceRange);
+    
     useEffect(() => {
         const fetchCategoryData = async () => {
             try {
-                const categoryId = selectedCategory.split("-")[1];
-                console.log(categoryId);
+                const categoryId = selectedCategory?.split("-")[1];
                 const response = await fetchWithAuth(`http://localhost:8000/api/categories/${categoryId}/`);
                 if(!response.ok){
                     if(response.status === 404){
@@ -74,34 +81,20 @@ export default function ResultSidebar(){
             <div className="brands">
                 <h2 className="font-bold text-sm mb-1.5">Brands</h2>
                 <div className="options flex flex-col gap-y-0.5">
-                    <label className="text-sm">
-                        <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
-                        Instant
-                    </label>
-                    <label className="text-sm">
-                        <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
-                        Ninja
-                    </label>
-                    <label className="text-sm">
-                        <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
-                        Crock-Pot
-                    </label>
-                    <label className="text-sm">
-                        <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
-                        Hawkins
-                    </label>
-                    <label className="text-sm">
-                        <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
-                        AROMA
-                    </label>
-                    <label className="text-sm">
-                        <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
-                        CUCKOO
-                    </label>
-                    <label className="text-sm">
-                        <input type="checkbox" name="" id="" className="me-1.5 scale-125"/>
-                        Fissler
-                    </label>
+                    {brands && brands.map((brand, idx) => (
+                        <a key={idx} onClick={() => handleBrandSelection(brand)} className=''>
+                            <label key={idx} className="text-sm hover:text-red-600 hover:cursor-pointer">
+                                <input 
+                                    type="checkbox" 
+                                    name="" 
+                                    id="" 
+                                    className="me-1.5 scale-125"
+                                    checked={selectedBrands.includes(brand)}
+                                    />
+                                {brand}
+                            </label>
+                        </a>
+                    ))}
                 </div>
             </div>
             <div className="price">
@@ -111,13 +104,16 @@ export default function ResultSidebar(){
                     <RangeSlider
                         id={'priceSlider'}
                         className={'mt-4 max-w-[70%] me-2 bottom-1/2 absolute translate-y-1/2'}   
-                        min={100}
-                        max={2000}
-                        step={50}
+                        min={0}
+                        max={priceRange.max}
+                        step={10}
                         value={sliderValue}
                         onInput={handleSliderChange}
                     />
-                    <button className='span absolute px-3 py-1 rounded-3xl text-sm border border-slate-800 right-4'>Go</button>
+                    <button 
+                        className='span absolute px-3 py-1 rounded-3xl text-sm border border-slate-800 right-4'
+                        onClick={() => handlePriceRangeSelection(sliderValue)}
+                        >Go</button>
                 </div>
                 
             </div>
