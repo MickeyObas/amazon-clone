@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # Internal Apps
     'accounts.apps.AccountsConfig',
     'api.apps.ApiConfig',
+    'carts.apps.CartsConfig',
     'categories.apps.CategoriesConfig',
     'products.apps.ProductsConfig',
     'ratings.apps.RatingsConfig',

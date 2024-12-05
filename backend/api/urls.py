@@ -7,5 +7,6 @@ urlpatterns = [
     path('login', views.login, name='login'),
     path('users/', include('accounts.urls')),
     path('products/', include('products.urls')),
-    path('categories/', include('categories.urls'))
+    path('categories/', include('categories.urls')),
+    path('cart/', include('carts.urls'))
 ]

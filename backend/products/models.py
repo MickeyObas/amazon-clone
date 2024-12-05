@@ -9,7 +9,7 @@ class Product(models.Model):
     description = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     rating = models.DecimalField(max_digits=3, decimal_places=1, blank=True, null=True)
-    quantity_in_stock = models.IntegerField()
+    quantity_in_stock = models.IntegerField(default=0)
     category = models.ForeignKey('categories.Category', related_name='products', on_delete=models.SET_NULL, null=True, blank=True)
     avg_rating = models.DecimalField(max_digits=2, decimal_places=1, default=0.0, blank=True, null=True)
     rating_count = models.PositiveIntegerField(default=0)
