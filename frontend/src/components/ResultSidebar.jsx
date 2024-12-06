@@ -12,7 +12,7 @@ export default function ResultSidebar({
     handlePriceRangeSelection,
     priceRange
 }){
-    const [sliderValue, setSliderValue] = useState([0, priceRange.max]);
+    const [sliderValue, setSliderValue] = useState([0, 120]);
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
     const [categoryData, setCategoryData] = useState({});
@@ -105,7 +105,7 @@ export default function ResultSidebar({
                         id={'priceSlider'}
                         className={'mt-4 max-w-[70%] me-2 bottom-1/2 absolute translate-y-1/2'}   
                         min={0}
-                        max={priceRange.max}
+                        max={120}
                         step={10}
                         value={sliderValue}
                         onInput={handleSliderChange}

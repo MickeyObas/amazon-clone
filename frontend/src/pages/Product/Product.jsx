@@ -4,7 +4,7 @@ import ProductRating from "../../components/ProductRating";
 import { fetchWithAuth, getMoneyParts } from "../../utils";
 
 // Temporary imports till refactor
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { resolvePath, useParams, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 
@@ -29,7 +29,25 @@ export default function Product(){
     const [error, setError] = useState(false);
     const [loading, setLoading] = useState(true);
 
+    const [quantity, setQuantity] = useState(1);
+
     const { integerPart, decimalPart } = getMoneyParts(product?.price || "0");
+
+    const qsRef = useCallback(node => {
+        if (node !== null){
+            const handleQuantityChange = () => {
+                const options = node.options;
+                Array.from(options).forEach((option) => option.textContent = option.value)
+                const selectedOption = options[options.selectedIndex];
+                selectedOption.textContent = `Quantity: ${selectedOption.value}`
+            }
+            node.addEventListener('change', handleQuantityChange);
+        }
+    }, [])
+
+    const handleQuantityValueChange = (e) => {
+        setQuantity(e.target.value);
+    }
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -87,6 +105,25 @@ export default function Product(){
         }
       };
 
+      const handleAddToCartClick = async () => {
+        try {
+            const response = await fetchWithAuth(`http://localhost:8000/api/cart/add/${product.id}/`, {
+                method: 'POST',
+                body: JSON.stringify({
+                    'quantity': quantity
+                })
+            });
+            if(!response.ok){
+                console.error("Whoops!")
+            }else{
+                const data = await response.json();
+                console.log(data);
+            }
+        } catch (err){
+            console.log(err);
+        }
+      }
+
       useEffect(() => {
         const handleScroll = () => {
             if(panelCarouselDivRef.current){
@@ -95,7 +132,6 @@ export default function Product(){
                 setIsRightButtonDim((scrollLeft + clientWidth) >= scrollWidth);
             }
         }
-
     
         const panelCarouselDivCurrent = panelCarouselDivRef.current;
 
@@ -267,10 +303,20 @@ export default function Product(){
                         </div>
                         <div className="stock-cart flex flex-col">
                             <h1 className="text-green-600 text-lg mb-2">In Stock</h1>
-                            <select name="" id="" className="bg-slate-100 border border-slate-300 rounded-md p-1 text-sm mb-3">
-                                <option value="">Quantity: 1</option>
+                            <select ref={qsRef} name="" id="quantitySelect" className="bg-slate-100 border border-slate-300 rounded-md p-1 text-sm mb-3"
+                            value={quantity}
+                            onChange={handleQuantityValueChange}
+                            >
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
                             </select>
-                            <button className="text-[13px] bg-[#FFD814] py-1.5 rounded-full mb-1.5">Add to Cart</button>
+                            <button
+                                className="text-[13px] bg-[#FFD814] py-1.5 rounded-full mb-1.5"
+                                onClick={handleAddToCartClick}
+                                >Add to Cart</button>
                             <button className="text-[13px] bg-[#ff8914] py-1.5 rounded-full mb-1.5">Buy Now</button>
                         </div>
                         <table className="w-full table-fixed mt-2">

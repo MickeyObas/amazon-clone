@@ -163,7 +163,7 @@ export default function Header(){
                         </div>
                     </div>
                 </a>
-                <a href="" className='ms-auto'>
+                <a href="/cart/" className='ms-auto'>
                     <div className='top-menu-tab flex items-center'>
                         <img src={cartIcon} className='w-10' />
                         <div className='text-white text-sm font-bold self-end ms-0.5'>Cart</div>

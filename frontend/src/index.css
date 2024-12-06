@@ -88,3 +88,12 @@ body, .fancy-line:after {
   -webkit-line-clamp: 4;
   line-height: 1.5em;
 }
+
+.cart-product-title{
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  line-height: 1.5em;
+}

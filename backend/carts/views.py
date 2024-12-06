@@ -4,9 +4,40 @@ from rest_framework.decorators import api_view
 
 from products.models import Product
 from carts.models import Cart, CartItem
-from .serializers import CartSerializer
+from .serializers import CartSerializer, CartItemSerializer
 
 import json
+
+
+@api_view(['GET'])
+def cart(request):
+    try:
+        cart = Cart.objects.get(
+            user=request.user
+        )
+    except Cart.DoesNotExist:
+        return Response({'error': 'User cart does not exist'})
+    
+    serializer = CartSerializer(cart, context={'request': request})
+
+    return Response(serializer.data)
+
+
+@api_view(['PATCH'])
+def update_cart(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    cart = cart_item.cart
+    quantity = json.loads(request.body)['quantity']
+    if quantity is not None and quantity > 0:
+        cart_item.quantity = quantity
+        cart_item.save()
+        return Response({
+            'status': 'Item quantity updated',
+            'total_quantity': cart.get_total_quantity(),
+            'total_price': cart.get_total_price()
+        })
+    return Response({'error': 'Invalid Quantity'})
+    
 
 @api_view(['POST'])
 def add_to_cart(request, product_id):
@@ -19,8 +50,6 @@ def add_to_cart(request, product_id):
         user=request.user
     )
 
-    quantity = json.loads(request.body)['quantity']
-
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
         product=product,
@@ -30,12 +59,17 @@ def add_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
     else:
+        quantity = json.loads(request.body)['quantity']
         cart_item.quantity = quantity
         cart_item.save()
 
     return Response({
         'message': 'Item added to cart successfully',
-        'cart': CartSerializer(cart).data
+        'cart': CartSerializer(cart).data,
+        'cart_item': {
+            'id': cart_item.id,
+            'quantity': cart_item.quantity
+        }
     })
     
 

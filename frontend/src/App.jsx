@@ -12,6 +12,7 @@ import NotFound from './pages/NotFound/NotFound.jsx';
 import  ProtectedRoutes from './utils.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { CategoryProvider } from './context/CategoryContext.jsx';
+import Cart from './pages/Cart/Cart.jsx';
 
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Route path='/' element={<MainLayout />}>
             <Route index element={<Home />} />
             <Route path='s/' element={<Results />} />
+            <Route path='cart/' element={<Cart />} />
             <Route path='product/:id' element={<Product />} />
           </Route>
         </Route>
