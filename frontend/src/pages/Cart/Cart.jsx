@@ -5,7 +5,11 @@ import CartItem from "../../components/CartItem";
 
 export default function Cart(){
     
-    const [cart, setCart] = useState([]);
+    const [cart, setCart] = useState({
+        items: [],
+        total_quantity: 0,
+        total_price: 0
+    });
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -32,10 +36,11 @@ export default function Cart(){
           body: JSON.stringify({ quantity: newQuantity }),
         });
 
-        if(!response.json){
+        if(!response.ok){
             console.error("Something went wrong.");
         }else{
             const data = await response.json();
+            console.log(data);
             setCart((prevCart) => {
                 const updatedCart = {
                     ...prevCart,
@@ -48,25 +53,51 @@ export default function Cart(){
         }
       };
 
+    // const handleRemoveFromCart = async (itemId) => {
+    //    const response = await fetchWithAuth(`http://localhost:8000/api/cart/delete/${itemId}`, {
+    //     method: 'DELETE'
+    //    });
+    //    if (!response.ok){
+    //     console.log("Something went wrong in removing item from cart");
+    //    } else{
+    //     const data = await response.json();
+    //     setCart((prevCart) => {
+    //         const updatedCart = {
+    //             ...prevCart,
+    //             items: prevCart.items.filter((item) => item.id !== itemId),
+    //             total_price: data.total_price,
+    //             total_quantity: data.total_quantity
+    //         }
+    //         console.log("After delete: ", updatedCart);
+    //         return updatedCart;
+    //     });
+    //    }
+    // }
+
     const handleRemoveFromCart = async (itemId) => {
-       const response = await fetchWithAuth(`http://localhost:8000/api/cart/delete/${itemId}`, {
-        method: 'DELETE'
-       });
-       if (!response.ok){
-        console.log("Something went wrong in removing item from cart");
-       } else{
-        const data = await response.json();
-        setCart((prevCart) => {
-            const updatedCart = {
-                ...prevCart,
-                items: prevCart.items.filter((item) => item.id !== itemId),
-                total_price: data.total_price,
-                total_quantity: data.total_quantity
-            }
-            return updatedCart;
+        const response = await fetchWithAuth(`http://localhost:8000/api/cart/delete/${itemId}`, {
+            method: 'DELETE'
         });
-       }
-    }
+    
+        if (!response.ok) {
+            console.log("Something went wrong in removing item from cart");
+        } else {
+            const data = await response.json();
+    
+            // Properly update cart state
+            setCart((prevCart) => {
+                const updatedItems = prevCart.items.map(item => item.id === itemId ? {...item, isRemoved: true} : item);
+    
+                return {
+                    ...prevCart, 
+                    items: updatedItems,
+                    total_quantity: data.total_quantity,  
+                    total_price: data.total_price,
+                };
+            });
+        }
+    };
+    
 
     if(!cart || cart.length === 0) return <h1>Loading...</h1>
 
@@ -79,20 +110,21 @@ export default function Cart(){
                     <span className="self-end block text-[13px]">Price</span>
                     <hr className="mt-2"/>
                     {/* Cart Items */}
-                    {cart && cart?.items?.map((item, idx) => (
-                        <CartItem 
-                            key={idx}
-                            item={item}
-                            updateCart={updateCart}
-                            handleRemoveFromCart={handleRemoveFromCart}    
+                    {cart.items && cart.items.length > 0 ? (
+                        cart.items.map((item, idx) => (
+                            <CartItem 
+                                key={idx}
+                                item={item}
+                                updateCart={updateCart}
+                                handleRemoveFromCart={handleRemoveFromCart}    
                             />
-                    ))}
-                    {(!cart || cart.items.length === 0) && (
+                        ))
+                    ) : (
                         <div className="h-full flex items-center justify-center">
                             <h1 className="text-xs pt-1 text-red-600">There are no items in your cart, yet...</h1>
                         </div>
-                        
                     )}
+
                 </div>
                 <div className="side w-[24%] flex flex-col gap-2">
                     <div className="bg-white p-5 pb-10">

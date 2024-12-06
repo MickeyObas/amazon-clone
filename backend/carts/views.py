@@ -36,7 +36,7 @@ def update_cart(request, item_id):
             'total_quantity': cart.get_total_quantity(),
             'total_price': cart.get_total_price()
         })
-    return Response({'error': 'Invalid Quantity'})
+    return Response({'error': 'Invalid Quantity'}, status=status.HTTP_400_BAD_REQUEST)
     
 
 @api_view(['POST'])
@@ -82,8 +82,7 @@ def delete_from_cart(request, item_id):
         'status': 'Item deleted from cart successfully',
         'total_quantity': cart.get_total_quantity(),
         'total_price': cart.get_total_price()
-    }, 
-        status=status.HTTP_204_NO_CONTENT)
+    })
 
 
     

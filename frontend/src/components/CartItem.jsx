@@ -11,28 +11,31 @@ export default function CartItem({
 }){
 
     const [quantity, setQuantity] = useState(item.quantity);
-    const [isRemoved, setIsRemoved] = useState(false);
 
     const handleIncrement = () => {
-        const newQuantity = quantity + 1;
-        setQuantity(newQuantity);
-        updateCart(item.id, newQuantity);
+        setQuantity((prevQuantity) => {
+            const newQuantity = prevQuantity + 1;
+            updateCart(item.id, newQuantity);
+            return newQuantity;
+        })        
     }
 
     const handleDecrement = () => {
-        if(quantity > 1){
-            const newQuantity = quantity - 1;
-            setQuantity(newQuantity);
-            updateCart(item.id, newQuantity);
-        } else{
-            handleRemoveFromCart(item.id);
-            setIsRemoved(true);
-        }
-    }
+        setQuantity(prevQuantity => {
+            if (prevQuantity > 1) {
+                const newQuantity = prevQuantity - 1;
+                updateCart(item.id, newQuantity);
+                return newQuantity;
+            } else {
+                handleRemoveFromCart(item.id);
+                return prevQuantity; 
+            }
+        });
+    };
 
     return (
         <div className="cartItem">
-            {isRemoved ? (
+            {item.isRemoved ? (
                 <div className="p-6">
                     <p className="text-[13px] flex font-medium"><span className="text-blue-700 max-w-[40%] whitespace-nowrap overflow-hidden text-ellipsis block">{item.product.title}</span>&nbsp;was removed from Shopping Cart.</p>
                 </div>
