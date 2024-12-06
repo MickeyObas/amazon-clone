@@ -118,6 +118,7 @@ export default function Product(){
             }else{
                 const data = await response.json();
                 console.log(data);
+                alert(`"${product.title.slice(0, 30)}..." has been added to your cart!`)
             }
         } catch (err){
             console.log(err);
@@ -294,9 +295,9 @@ export default function Product(){
                             <img src={infoIcon} alt="" className="h-[18px]"/>
                             <span className="ms-2 text-sm w-[84%]">Sales taxes may apply at checkout</span>
                         </div>
-                        <div className="text-sm">Delivery <span className="font-semibold">Monday, December 2.</span></div>
+                        <div className="text-sm">Delivery <span className="font-semibold">Monday, December 13.</span></div>
                         <div className="text-sm mb-3">Order within <span className="text-red-500">9 hrs 17 mins</span></div>
-                        <div className="text-sm">Or fastest delivery <span className="font-semibold">Thursday, November 21</span></div>
+                        <div className="text-sm">Or fastest delivery <span className="font-semibold">Monday, December 9</span></div>
                         <div className="flex items-center my-2.5">
                             <img src={locationIcon} alt="" className="h-3.5 me-2"/>
                             <span className="text-[11px] text-slate-500">Deliver to Nigeria</span>

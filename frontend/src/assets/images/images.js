@@ -153,3 +153,4 @@ export { default as plus } from '../../assets/images/plus.png';
 
 export { default as user } from '../../assets/images/user.png';
 export { default as noProducts } from '../../assets/images/rejected.png';
+export { default as trash } from '../../assets/images/bin.png';

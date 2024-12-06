@@ -73,5 +73,17 @@ def add_to_cart(request, product_id):
     })
     
 
+@api_view(['DELETE'])
+def delete_from_cart(request, item_id):
+    cart_item = CartItem.objects.get(id=item_id)
+    cart = cart_item.cart
+    cart_item.delete()
+    return Response({
+        'status': 'Item deleted from cart successfully',
+        'total_quantity': cart.get_total_quantity(),
+        'total_price': cart.get_total_price()
+    }, 
+        status=status.HTTP_204_NO_CONTENT)
+
 
     

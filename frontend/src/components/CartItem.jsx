@@ -1,12 +1,17 @@
 import { useState } from "react"
 import PropTypes from 'prop-types';
 import { getMoneyParts } from "../utils";
-import { minus, plus } from "../assets/images/images";
+import { minus, plus, trash } from "../assets/images/images";
 import Cart from "../pages/Cart/Cart";
 
-export default function CartItem({item, updateCart}){
+export default function CartItem({
+    item,
+    updateCart,
+    handleRemoveFromCart
+}){
 
     const [quantity, setQuantity] = useState(item.quantity);
+    const [isRemoved, setIsRemoved] = useState(false);
 
     const handleIncrement = () => {
         const newQuantity = quantity + 1;
@@ -19,13 +24,21 @@ export default function CartItem({item, updateCart}){
             const newQuantity = quantity - 1;
             setQuantity(newQuantity);
             updateCart(item.id, newQuantity);
+        } else{
+            handleRemoveFromCart(item.id);
+            setIsRemoved(true);
         }
     }
 
     return (
         <div className="cartItem">
-            <div className="flex p-5 items-center justify-center">
-                <input type="checkbox" name="" id=""/>
+            {isRemoved ? (
+                <div className="p-6">
+                    <p className="text-[13px] flex font-medium"><span className="text-blue-700 max-w-[40%] whitespace-nowrap overflow-hidden text-ellipsis block">{item.product.title}</span>&nbsp;was removed from Shopping Cart.</p>
+                </div>
+            ) : (
+                <div className="flex p-5 items-center justify-center">
+                <input type="checkbox" name="" id="" className="scale-125"/>
                 <div className="w-32 h-44 ms-10">
                     <img src={item.product.picture} alt="" className="w-full h-full"/>
                 </div>
@@ -38,11 +51,19 @@ export default function CartItem({item, updateCart}){
                     </div>
                     <div className="flex">
                         <div className="flex items-center border-[3.5px] border-[#FFD814] rounded-full w-28 px-2 py-1 justify-between mt-3">
-                            <img 
+                            {quantity > 1 ? (
+                                <img 
                                 src={minus}
                                 className="w-3.5 h-3.5 cursor-pointer"
                                 onClick={handleDecrement}
                                 />
+                            ) : (
+                                <img 
+                                src={trash}
+                                className="w-3.5 h-3.5 cursor-pointer"
+                                onClick={handleDecrement}
+                                />
+                            )}
                             <span className="text-[13px] font-semibold">{quantity}</span>
                             <img 
                                 src={plus}
@@ -58,6 +79,7 @@ export default function CartItem({item, updateCart}){
                     <span className='block text-xs me-0.5 font-normal'>{getMoneyParts(item.product.price)['decimalPart']}</span>
                 </div>
             </div>
+            )}
             <hr className="mb-2"/>
         </div>
     )
