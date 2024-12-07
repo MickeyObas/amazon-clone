@@ -22,6 +22,9 @@ class CartItem(models.Model):
     quantity = models.PositiveSmallIntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        ordering = ['-created']
+
     def get_subtotal(self):
         return self.product.price * self.quantity
 

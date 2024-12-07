@@ -32,7 +32,7 @@ class Product(models.Model):
         return ratings_dict
 
     def __str__(self):
-        return f"{self.category}: {self.title}"
+        return f"{self.category}: {self.title} - Stock[{self.quantity_in_stock}]"
 
 
 class ProductAttributeValue(models.Model):
