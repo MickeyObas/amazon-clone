@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Internal Apps
     'accounts.apps.AccountsConfig',
+    'addresses.apps.AddressesConfig',
     'api.apps.ApiConfig',
     'carts.apps.CartsConfig',
     'categories.apps.CategoriesConfig',
