@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'carts.apps.CartsConfig',
     'categories.apps.CategoriesConfig',
+    'orders.apps.OrdersConfig',
     'products.apps.ProductsConfig',
     'ratings.apps.RatingsConfig',
     # External Apps
