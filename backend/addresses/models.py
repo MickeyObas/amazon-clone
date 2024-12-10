@@ -5,9 +5,10 @@ from django.conf import settings
 class Address(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     street_address = models.CharField(max_length=255)
+    building_address = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
-    postal_code = models.CharField(max_length=255)
+    zip_code = models.CharField(max_length=12)
     country = models.CharField(max_length=255)
     phone = models.CharField(max_length=20)
     is_default = models.BooleanField(default=False)

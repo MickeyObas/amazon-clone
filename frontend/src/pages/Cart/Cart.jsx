@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { fetchWithAuth, getMoneyParts } from "../../utils";
 import { pillow2, minus, plus, primeIcon } from "../../assets/images/images"
 import CartItem from "../../components/CartItem";
+import { useCart } from "../../context/CartContext";
 
 export default function Cart(){
     
@@ -10,6 +11,8 @@ export default function Cart(){
         total_quantity: 0,
         total_price: 0
     });
+
+    const { settCart } = useCart();
 
     useEffect(() => {
         const fetchCart = async () => {
@@ -48,6 +51,8 @@ export default function Cart(){
                     total_quantity: data.total_quantity,
                     total_price: data.total_price
                 }
+                settCart(updatedCart);
+                localStorage.setItem('cart', JSON.stringify(updatedCart));
                 return updatedCart;
             })
         }
@@ -88,12 +93,20 @@ export default function Cart(){
             setCart((prevCart) => {
                 const updatedItems = prevCart.items.map(item => item.id === itemId ? {...item, isRemoved: true} : item);
     
-                return {
+                const updatedCart =  {
                     ...prevCart, 
                     items: updatedItems,
                     total_quantity: data.total_quantity,  
                     total_price: data.total_price,
                 };
+
+                settCart(updatedCart);
+                localStorage.setItem('cart', JSON.stringify({
+                    ...updatedCart,
+                    items: updatedCart.items.filter((item) => !item.isRemoved)
+                }));
+
+                return updatedCart;
             });
         }
     };
@@ -133,10 +146,11 @@ export default function Cart(){
                             <input type="checkbox" name="" id="" className="scale-125 me-2"/>
                             This order contains a gift
                         </label>
-                        <button 
-                            className="bg-[#FFD815] rounded-full text-xs px-4 py-2 w-full mt-3 font-medium"
+                        <a  
+                            href="/checkout"
+                            className="bg-[#FFD815] rounded-full text-xs px-4 py-2 w-full mt-3 font-medium block text-center"
                             >
-                        Proceed to checkout</button>
+                        Proceed to checkout</a>
                     </div>
                     <div className="bg-white p-5 pb-10">
                         <div className="flex">

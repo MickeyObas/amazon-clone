@@ -12,9 +12,6 @@ export function CategoryProvider({children}){
             {children}
         </CategoryContext.Provider>
     )
-
-    
-
 }
 
 export const useCategory = () => useContext(CategoryContext);

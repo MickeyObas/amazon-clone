@@ -1,0 +1,455 @@
+import { useContext, useEffect, useRef, useState } from "react";
+import { useCart } from "../../context/CartContext"
+import { close } from "../../assets/images/images";
+import {
+    CountrySelect,
+} from 'react-country-state-city';
+import "react-country-state-city/dist/react-country-state-city.css";
+import states from '../../data/states.json';
+import { AuthContext } from "../../context/AuthContext";
+import { fetchWithAuth } from '../../utils';
+
+export default function Checkout(){
+
+    const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+    const { cart } = useCart();
+    const { user } = useContext(AuthContext);
+    
+    const addressModalOverlayRef = useRef(null);
+    const addressModalRef = useRef(null);
+
+    const handleAddAddressClick = () => {
+        setIsAddressModalOpen(true);
+    }
+
+    const closeAddressModal = () => {
+        setIsAddressModalOpen(false);
+    }
+
+    useEffect(() => {
+
+        const handleClickOutside = (e) => {
+            if (addressModalOverlayRef.current && !addressModalRef.current.contains(e.target)) {
+              closeAddressModal();
+            }
+          };
+
+        if(isAddressModalOpen){
+            document.documentElement.style.overflow = 'hidden';
+            // document.addEventListener('mousedown', handleClickOutside);
+            if(addressModalOverlayRef.current){
+                addressModalOverlayRef.current.scrollTop = 0;
+            }
+        } else{
+            document.documentElement.style.overflow = 'auto';
+        }
+
+        return () => {
+            document.documentElement.style.overflow = 'auto';
+            // document.removeEventListener('mousedown', handleClickOutside)
+        }
+
+    }, [isAddressModalOpen]);
+
+    // Address Form Build
+    const [country, setCountry] = useState({}); // Send country.name
+    const [countryStates, setCountryStates] = useState([]);
+    const [phoneCode, setPhoneCode] = useState('');
+    const [name, setName] = useState(``);
+    const [phoneNumber, setPhoneNumber] = useState('');
+    const [streetAddressOrPoBox, setStreetAddressOrPoBox] = useState('');
+    const [buildingAddress, setBuildingAddress] = useState(''); // Combine both and send full address
+    const [city, setCity] = useState('');
+    const [state, setState] = useState('');
+    const [zipCode, setZipCode] = useState('');
+    const [isDefaultAddress, setIsDefaultAddress] = useState(false);
+
+    useEffect(() => {
+        setName(`${user?.first_name} ${user?.last_name && user.last_name}`);
+    }, [user])
+
+    const [error, setError] = useState({
+        country: '',
+        name: '',
+        phoneNumber: '',
+        streetAddressOrPoBox: '',
+        buildingAddress: '',
+        city: '',
+        state: '',
+        zipCode: '',
+    })
+
+
+    const handleCountryChange = (e) => {
+        setCountry(e);
+        setPhoneCode(e.phone_code);
+
+        const countryStatesCollection = states.find((state) => state.id === e.id);
+        setCountryStates(countryStatesCollection.states);
+    }
+
+    const handlePhoneNumberChange = (e) => {
+        setPhoneNumber(e.target.value);
+    }
+
+    const handleNameChange = (e) => {
+        setName(e.target.value);
+    }
+
+    const handleStreetOrPoBoxChange = (e) => {
+        setStreetAddressOrPoBox(e.target.value);
+    }
+
+    const handleBuildingAddressChange = (e) => {
+        setBuildingAddress(e.target.value);
+    }
+
+    const handleCityChange = (e) => {
+        setCity(e.target.value);
+    }
+
+    const handleZipCodeChange = (e) => {
+        setZipCode(e.target.value);
+    }
+
+    const handleStateChange = (e) => {
+        setState(e.target.value);
+    }
+
+    const handleIsDefaultAdressChange = (e) => {
+        setIsDefaultAddress(e.target.checked);
+    }
+
+    const validateAddressForm = () => {
+        let isValid = true;
+        if(!country.name){
+            console.log(country);
+            setError((prev) => (
+                {...prev, country: 'Country name must be provided'}
+            ));
+            isValid = false;
+        }else{
+            setError((prev) => (
+                {...prev, country:''}
+            ))
+        }
+
+        if(!phoneNumber){
+            setError((prev) => (
+                {...prev, phoneNumber: 'Please enter a phone number so we can call if there are any issues with delivery.'}
+            ))
+        }else{
+            setError((prev) => (
+                {...prev, phoneNumber:''}
+            ))
+        }
+
+        if(!city){
+            setError((prev) => (
+                {...prev, city: 'City name must be provided'}
+            ));
+            isValid = false;
+        }else{
+            setError((prev) => (
+                {...prev, city:''}
+            ))
+        }
+
+        if(!state){
+            setError((prev) => (
+                {...prev, state: 'State name must be provided'}
+            ));
+            isValid = false;
+        }else{
+            setError((prev) => (
+                {...prev, state:''}
+            ))
+        }
+
+        if(!streetAddressOrPoBox){
+            setError((prev) => (
+                {...prev, streetAddressOrPoBox: 'Street Address or P.O. Box must be provided'}
+            ));
+            isValid = false;
+        }else{
+            setError((prev) => (
+                {...prev, streetAddressOrPoBox:''}
+            ))
+        };
+
+        if(!buildingAddress){
+            setError((prev) => (
+                {...prev, buildingAddress: 'Building address must be provided'}
+            ));
+            isValid = false;
+        }else{
+            setError((prev) => (
+                {...prev, buildingAddress:''}
+            ))
+        };
+
+        if(!zipCode){
+            setError((prev) => (
+                {...prev, zipCode: 'Building address must be provided'}
+            ));
+            isValid = false;
+        }else{
+            setError((prev) => (
+                {...prev, zipCode:''}
+            ))
+        };
+
+        return isValid;
+
+    }
+
+    const handleUseAddressClick = async (e) => {
+        e.preventDefault();
+
+        const formValid = validateAddressForm();
+
+        if(!formValid){
+            console.log("Error: ", error);
+            return;
+        }
+
+        const addressInfo = {
+            action: 'order-create',
+            userId: user?.id,
+            streetAddress: streetAddressOrPoBox,
+            buildingAddress: buildingAddress,
+            city: city,
+            state: state,
+            zipCode: zipCode,
+            country: country.name || '',
+            phone: "+" + phoneCode + phoneNumber,
+            isDefault: isDefaultAddress,
+            deliveryInstructions: '',
+        };
+
+        try {
+            const response = await fetchWithAuth('http://localhost:8000/api/addresses/add', {
+                method: 'POST',
+                body: JSON.stringify(addressInfo)
+            })
+
+            if(!response.ok){
+                console.log("Whoops");
+            } else{
+                const data = await response.json();
+                console.log(data);
+            }
+
+        } catch (err) {
+            console.log(err);
+        }
+
+    }
+
+    
+
+    return (
+        <div>
+            <div 
+                className={`address-modal-overlay ${isAddressModalOpen ? 'block' : 'hidden'}`}
+                ref={addressModalOverlayRef}
+                >
+                <div 
+                     className="address-modal-content rounded-lg shadow-lg"
+                     ref={addressModalRef}
+                    >
+                    <div className="address-modal-inner flex flex-col">
+                        <div className="flex justify-between items-center p-5 bg-gray-100 border border-b-slate-300 rounded-t-md overflow-hidden">
+                            <h1>Add an address</h1>
+                            <img 
+                                src={close} 
+                                alt="" 
+                                className="h-3 w-3 cursor-pointer"
+                                onClick={closeAddressModal}
+                                />
+                        </div>
+                        <form action="" className="px-9 py-6 flex flex-col gap-4 bg-white rounded-b-md">
+                            <h1 className="font-bold text-2xl">Enter a new shipping address</h1>
+                            <div>
+                                <div className="flex justify-between text-[13px] p-5 bg-blue-50 border border-blue-300 rounded-md items-center">
+                                    <h1 className="ms-6 font-semibold">Save time. Autofill your current location.</h1>
+                                    <button className="border-slate-600 border px-2 py-1 rounded-full bg-white">Autofill</button>
+                                </div>
+                            </div>
+                            <div className="flex flex-col text-sm">
+                                <label className="font-semibold block mb-1">Country/Region</label>
+                                <CountrySelect
+                                    containerClassName="text-sm country-select"
+                                    inputClassName="country-select-input"
+                                    onChange={handleCountryChange}
+                                />
+                                {error.country && (
+                                    <p className="text-red-700 text-xs mt-1.5">{error.country}</p>
+                                )}
+                            </div>
+                            <div className="flex flex-col text-sm">
+                                <label className="font-semibold block mb-1">Full name (First and Last name)</label>
+                                <input 
+                                    type="text"
+                                    className="border border-slate-400 rounded-md py-1 px-2"
+                                    value={name}
+                                    onChange={handleNameChange}
+                                    />
+                            </div>
+                            <div className="flex flex-col text-sm">
+                                <label className="font-semibold block mb-1">Phone number</label>
+                                <div className="flex items-center">
+                                    <div 
+                                        className="text-sm border border-slate-400 border-e-none rounded-s-md py-1 px-2 bg-blue-50"
+                                        >+{phoneCode ? phoneCode : 'Code'}</div>
+                                    <input 
+                                        type="text" 
+                                        className="border border-slate-400 rounded-md rounded-s-none py-1 px-2 border-s-0 w-full"
+                                        value={phoneNumber}
+                                        onChange={handlePhoneNumberChange}
+                                        />
+                                </div>
+                                <p className="text-xs mt-1">May be used to assist delivery</p>
+                                {error.phoneNumber && (
+                                    <p className="text-red-700 text-xs mt-1.5">{error.phoneNumber}</p>
+                                )}
+                            </div>
+                            <div className="flex flex-col text-sm">
+                                <label className="font-semibold block mb-1">Address</label>
+                                <div className="flex flex-col mb-3">
+                                    <input 
+                                        type="text"
+                                        className="border border-slate-400 rounded-md py-1 px-2 placeholder:text-slate-500" placeholder="Street Address or P.O. Box"
+                                        value={streetAddressOrPoBox}
+                                        onChange={handleStreetOrPoBoxChange}
+                                        />
+                                        {error.streetAddressOrPoBox && (
+                                        <p className="text-red-700 text-xs mt-1.5">{error.streetAddressOrPoBox}</p>
+                                    )}
+                                    </div>
+                                <div className="flex flex-col mb-3">
+                                    <input 
+                                        type="text"
+                                        className="border border-slate-400 rounded-md py-1 px-2 placeholder:text-slate-500" placeholder="Apt, suite, unit, building, floor, etc."
+                                        value={buildingAddress}
+                                        onChange={handleBuildingAddressChange}
+                                        />
+                                    {error.buildingAddress && (
+                                    <p className="text-red-700 text-xs mt-1.5">{error.buildingAddress}</p>
+                                    )}
+                                </div>
+                               
+                            </div>
+                            <div className="flex text-sm justify-between">
+                                <div className="flex flex-col w-[40%]">
+                                    <label className="font-semibold block mb-1">City</label>
+                                    <input type="text" className="border border-slate-400 rounded-md py-1 px-2 mb-1" value={city} onChange={handleCityChange}/>
+                                    {error.city && (
+                                    <p className="text-red-700 text-xs mt-1.5">{error.city}</p>
+                                )}
+                                </div>
+                                <div className="flex flex-col w-[29%]">
+                                    <label className="font-semibold block mb-1">State</label>
+                                    <select 
+                                        name="" id="" 
+                                        className="border border-slate-400 py-1 px-2 rounded-md block"
+                                        value={state}
+                                        onChange={handleStateChange}
+                                        >
+                                        <option>-</option>
+                                        {countryStates.length > 0 && countryStates.map((state, idx) => (
+                                            <option key={idx} value={state.name}>{state.name}</option>
+                                        ))}
+                                    </select>
+                                    {error.state && (
+                                    <p className="text-red-700 text-xs mt-1.5">{error.state}</p>
+                                )}
+                                </div>
+                                <div className="flex flex-col w-[29%]">
+                                    <label className="font-semibold block mb-1">ZIP Code</label>
+                                    <input 
+                                        type="text" 
+                                        className="border border-slate-400 rounded-md py-1 px-2 mb-1"
+                                        value={zipCode}
+                                        onChange={handleZipCodeChange}
+                                        />
+                                        {error.zipCode && (
+                                        <p className="text-red-700 text-xs mt-1.5">{error.zipCode}</p>
+                                )}
+                                </div>
+                            </div>
+                            <label className="text-sm flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    name="" 
+                                    id="" 
+                                    className="me-1"
+                                    value={isDefaultAddress}
+                                    onChange={handleIsDefaultAdressChange}
+                                />
+                                Make this my default address
+                            </label>
+                            <p className="text-sm font-semibold">Delivery instructions (optional)</p>
+                            <button 
+                                className="bg-[#FFD815] py-1.5 px-2.5 w-auto self-start text-[13px] rounded-full mt-6"
+                                onClick={handleUseAddressClick}
+                                >Use this address</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div className="checkout-container bg-slate-100">
+                <div className="checkout-content flex justify-between py-3 px-24">
+                    <div className="w-[73%] flex flex-col gap-5">
+                        <div className="bg-white p-5 pb-10 flex flex-col gap-3">
+                            <h1 className="text-lg font-bold">Add delivery or pickup address</h1>
+                            <button 
+                                className="bg-[#FFD815] rounded-full text-[13px] p-1.5 px-3.5 w-[30%]"
+                                onClick={handleAddAddressClick}
+                                >Add a new delivery address
+                            </button>
+                            <button className="span rounded-full text-[13px] p-1.5 px-3.5 border border-black w-[30%]">Find a pickup location nearby</button>
+                        </div>
+                        <div className="bg-white p-5 flex flex-col gap-3">
+                            <h1 className="text-lg font-bold">Payment Method</h1>
+                        </div>
+                        <div className="bg-white p-5 flex flex-col gap-3">
+                            <h1 className="text-lg font-bold">Review items and shipping</h1>
+                        </div>
+                        <div className="bg-white p-5 flex flex-col gap-3 text-xs">
+                            <p>Why has sales tax been applied? See <span className="text-blue-700">blah, blah, and blah.</span></p>
+                            <p>Need help? <span className="text-blue-700">Get help.</span></p>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur, expedita ut! Iure natus alias corporis voluptatum. Nobis iusto sit, neque nemo voluptate at? Delectus sint illo perspiciatis tenetur at dolorem id. Incidunt quia quidem quisquam nulla assumenda ad nostrum. Qui!</p>
+                            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime dolor laborum reiciendis atque, eligendi eaque? See <span className="text-blue-700">blah, blah, and blah.</span></p>
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus similique, laboriosam vero odit ducimus explicabo voluptas reprehenderit dolore porro culpa. Sunt animi voluptatem dignissimos natus? See <span className="text-blue-700">Amazon's Return Policy.</span></p>
+                        </div>
+                    </div>
+                    <div className="w-[25%]">
+                        <div className="bg-white flex flex-col p-5">
+                            <button className="bg-[#FFD815] rounded-full text-[13px] p-1.5 px-3.5 mb-3">Deliver to this address</button>
+                            <hr className="mt-2 mb-4"/>
+                            <div className="flex flex-col gap-1 text-xs">
+                                <div className="flex justify-between">
+                                    <div>Items ({cart.total_quantity}):</div>
+                                    <div>--</div>
+                                </div>
+                                <div className="flex justify-between">
+                                    <div>Shipping and handling:</div>
+                                    <div>--</div>
+                                </div>
+                                <div className="flex justify-between">
+                                    <div>Estimated tax to be collected:</div>
+                                    <div>--</div>
+                                </div>
+                            </div>
+                            <div className="flex justify-between mt-1.5 font-bold">
+                                <h1>Order total:</h1>
+                                <h1>${cart.total_price}</h1>
+                            </div>
+                        </div>      
+                    </div>
+                </div>
+            </div>
+        </div>
+    )
+}

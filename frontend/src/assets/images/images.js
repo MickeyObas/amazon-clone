@@ -150,6 +150,7 @@ export { default as ri_5 } from '../../assets/images/ri-5.jpg';
 
 export { default as minus } from '../../assets/images/minus2.png';
 export { default as plus } from '../../assets/images/plus.png';
+export { default as close } from '../../assets/images/close.png';
 
 export { default as user } from '../../assets/images/user.png';
 export { default as noProducts } from '../../assets/images/rejected.png';

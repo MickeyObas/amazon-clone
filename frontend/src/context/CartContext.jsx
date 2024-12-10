@@ -3,11 +3,13 @@ import PropTypes from 'prop-types'
 
 const CartContext = createContext();
 
-const CartProvider = ({children}) => {
-    const [cart, setCart] = useState({});
+export const CartProvider = ({children}) => {
+    const [cart, settCart] = useState(
+        JSON.parse(localStorage.getItem('cart'))
+    );
 
     return (
-        <CartContext.Provider value={{cart, setCart}}>
+        <CartContext.Provider value={{cart, settCart}}>
             {children}
         </CartContext.Provider>
     )
@@ -17,4 +19,4 @@ export const useCart = () => useContext(CartContext);
 
 CartProvider.propTypes = {
     children: PropTypes.any
-}
+} 

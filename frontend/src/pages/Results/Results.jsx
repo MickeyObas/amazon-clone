@@ -60,7 +60,6 @@ export default function Results(){
     const brands = Array.from(new Set(products.map((product) => product.brand).filter(Boolean)));
 
     useEffect(() => {
-        console.log(products)
         if (products.length > 0) {
             const prices = products.map((product) => product.price);
             const minPrice = Math.round(Math.min(...prices)) - 10;

@@ -22,8 +22,6 @@ export default function ResultSidebar({
     }
 
     const { selectedCategory } = useCategory();
-
-    console.log(priceRange);
     
     useEffect(() => {
         const fetchCategoryData = async () => {

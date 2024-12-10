@@ -7,6 +7,7 @@ import { fetchWithAuth, getMoneyParts } from "../../utils";
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { resolvePath, useParams, useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
+import { useCart } from "../../context/CartContext";
 
 
 import leftArrow from '../../assets/images/left-arrow.png';
@@ -48,6 +49,8 @@ export default function Product(){
     const handleQuantityValueChange = (e) => {
         setQuantity(e.target.value);
     }
+
+    const { settCart } = useCart();
 
     useEffect(() => {
         const fetchProduct = async () => {
@@ -117,7 +120,8 @@ export default function Product(){
                 console.error("Whoops!")
             }else{
                 const data = await response.json();
-                console.log(data);
+                settCart(data.cart);
+                localStorage.setItem('cart', JSON.stringify(data.cart))
                 alert(`"${product.title.slice(0, 30)}..." has been added to your cart!`)
             }
         } catch (err){

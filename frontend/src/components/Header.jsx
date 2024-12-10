@@ -12,6 +12,7 @@ import menuIcon from '../assets/images/menu1.png';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { useCategory } from '../context/CategoryContext.jsx';
 import { fetchWithAuth } from '../utils';
+import { useCart } from '../context/CartContext.jsx';
 
 
 export default function Header(){
@@ -22,6 +23,7 @@ export default function Header(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
+    const { cart } = useCart();
 
     const { selectedCategory, setSelectedCategory } = useCategory();    
 
@@ -90,6 +92,29 @@ export default function Header(){
         const searchParams = new URLSearchParams(searchData);
         
         navigate(`s/?${searchParams.toString()}`);
+    }
+
+    const isCheckoutPage = location.pathname.includes('checkout');
+
+    if(isCheckoutPage){
+        return (
+            <header className="flex flex-col">
+            <div className="top-menu flex justify-between h-16 px-6 items-center bg-gradient-to-r from-green-950 to-green-700">
+                <a href='/'><img src={AmazonLogo} className='w-[95px] mt-2'/></a>
+                <a href="" className='text-white text-3xl'>Secure checkout</a>
+                <a href="/cart/" className=''>
+                    <div className='top-menu-tab flex items-center'>
+                        <div className='relative'>
+                            <img src={cartIcon} className='w-10' />
+                            {/* <div className='absolute bottom-0 -right-3 bg-white rounded-full h-5 w-5 flex items-center justify-center text-white text-xs'>
+                                <div className='text-white text-sm font-bold'></div>
+                            </div> */}
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </header>
+        )
     }
 
     return (
@@ -165,8 +190,13 @@ export default function Header(){
                 </a>
                 <a href="/cart/" className='ms-auto'>
                     <div className='top-menu-tab flex items-center'>
-                        <img src={cartIcon} className='w-10' />
-                        <div className='text-white text-sm font-bold self-end ms-0.5'>Cart</div>
+                        <div className='relative'>
+                            <img src={cartIcon} className='w-10' />
+                            <div className='absolute bottom-0 -right-3 bg-red-500 rounded-full h-5 w-5 flex items-center justify-center text-white text-xs'>
+                                <div className='text-white text-sm font-bold'>{cart?.total_quantity || 0}</div>
+                            </div>
+                        </div>
+                       
                     </div>
                 </a>
             </div>

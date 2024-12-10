@@ -12,32 +12,37 @@ import NotFound from './pages/NotFound/NotFound.jsx';
 import  ProtectedRoutes from './utils.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 import { CategoryProvider } from './context/CategoryContext.jsx';
+import { CartProvider } from './context/CartContext.jsx';
 import Cart from './pages/Cart/Cart.jsx';
+import Checkout from './pages/Checkout/Checkout.jsx';
 
 
 export default function App() {
   return (
    <AuthProvider>
-    <CategoryProvider>
-      <Routes>
+    <CartProvider>
+      <CategoryProvider>
+        <Routes>
 
-        {/* Protected Routes */}
-        <Route element={<ProtectedRoutes />}>
-          <Route path='/' element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path='s/' element={<Results />} />
-            <Route path='cart/' element={<Cart />} />
-            <Route path='product/:id' element={<Product />} />
+          {/* Protected Routes */}
+          <Route element={<ProtectedRoutes />}>
+            <Route path='/' element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path='s/' element={<Results />} />
+              <Route path='cart/' element={<Cart />} />
+              <Route path='checkout/' element={<Checkout />} />
+              <Route path='product/:id' element={<Product />} />
+            </Route>
           </Route>
-        </Route>
 
-        {/* Public Routes */}
-        <Route path='register' element={<Register />} />
-        <Route path='login' element={<Login />} />
-        <Route path='*' element={<NotFound />} />
+          {/* Public Routes */}
+          <Route path='register' element={<Register />} />
+          <Route path='login' element={<Login />} />
+          <Route path='*' element={<NotFound />} />
 
-        </Routes>
-      </CategoryProvider>
+          </Routes>
+        </CategoryProvider>
+      </CartProvider>
     </AuthProvider>
     
   )
