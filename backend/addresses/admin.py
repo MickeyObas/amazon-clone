@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Address
+
+
+class AddressModelAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Address, AddressModelAdmin)

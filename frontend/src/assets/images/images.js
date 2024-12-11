@@ -155,3 +155,5 @@ export { default as close } from '../../assets/images/close.png';
 export { default as user } from '../../assets/images/user.png';
 export { default as noProducts } from '../../assets/images/rejected.png';
 export { default as trash } from '../../assets/images/bin.png';
+export { default as creditCard } from '../../assets/images/credit-card.png';
+export { default as pluss } from '../../assets/images/pluss.png';

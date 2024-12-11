@@ -116,6 +116,24 @@ body, .fancy-line:after {
   margin: 64px auto;
 }
 
+.payment-modal-overlay{
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0,0,0);
+  background-color: rgb(0,0,0,0.5);
+  overflow: auto;
+}
+
+.payment-modal-container{
+  width: 58%;
+  background-color: #fcf4f4;
+  /* margin: 64px auto; */
+}
+
 .country-select-input{
   border: 0 !important ;
   padding: 0px !important;

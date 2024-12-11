@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { useCart } from "../../context/CartContext"
-import { close } from "../../assets/images/images";
+import { close, creditCard, pluss } from "../../assets/images/images";
 import {
     CountrySelect,
 } from 'react-country-state-city';
@@ -8,22 +8,37 @@ import "react-country-state-city/dist/react-country-state-city.css";
 import states from '../../data/states.json';
 import { AuthContext } from "../../context/AuthContext";
 import { fetchWithAuth } from '../../utils';
+import { json } from "react-router-dom";
 
 export default function Checkout(){
+    const currentDate = new Date(Date.now());
 
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
+    const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+
     const { cart } = useCart();
     const { user } = useContext(AuthContext);
     
     const addressModalOverlayRef = useRef(null);
     const addressModalRef = useRef(null);
 
+    const paymentOverflayRef = useRef(null);
+    const paymentModalRef = useRef(null);
+
     const handleAddAddressClick = () => {
         setIsAddressModalOpen(true);
     }
 
+    const handleAddPaymentClick = () => {
+        setIsPaymentModalOpen(true);
+    }
+
     const closeAddressModal = () => {
         setIsAddressModalOpen(false);
+    }
+
+    const closePaymentModal = () => {
+        setIsPaymentModalOpen(false);
     }
 
     useEffect(() => {
@@ -123,7 +138,6 @@ export default function Checkout(){
     const validateAddressForm = () => {
         let isValid = true;
         if(!country.name){
-            console.log(country);
             setError((prev) => (
                 {...prev, country: 'Country name must be provided'}
             ));
@@ -234,22 +248,168 @@ export default function Checkout(){
             })
 
             if(!response.ok){
-                console.log("Whoops");
+                const data = await response.json();
+                alert(data.message);
             } else{
                 const data = await response.json();
                 console.log(data);
+                setAddress(data);
+                //localStorage.setItem('address', JSON.stringify(data));
+                //setIsAddressSelected(true);
+                setIsAddressModalOpen(false);
             }
 
         } catch (err) {
             console.log(err);
         }
-
     }
 
+    const [isAddressSelected, setIsAddressSelected] = useState(false);
+    // const [address, setAddress] = useState(
+    //     JSON.parse(localStorage.getItem('address')) || {}
+    // );
+    const [address, setAddress] = useState({});
+
+    // Payment Card Form Build
+    const [cardNumber, setCardNumber] = useState('');
+    const [cardAccountName, setCardAccountName] = useState('');
+    const [expMonth, setExpMonth] = useState('01');
+    const [expYear, setExpYear] = useState(currentDate.getFullYear());
+    const [cvv, setCvv] = useState('');
+
+    const handleCardNumberChange = (e) => {
+        setCardNumber(e.target.value);
+    }
+
+    const handleCardAccountNameChange = (e) => {
+        setCardAccountName(e.target.value);
+    }
+
+    const handleExpMonthChange = (e) => {
+        setExpMonth(e.target.value);
+    }
+
+    const handleExpYearChange = (e) => {
+        setExpYear(e.target.value);
+    }
+
+    const handleCvvChange = (e) => {
+        setCvv(e.target.value);
+    }
+
+    let constructedDate = `${expYear}-${expMonth}-01`;
+
+    const addPaymentCard = async () => {
+        const paymentCardDetails = {
+            number: cardNumber,
+            name: cardAccountName,
+            expDate: constructedDate,
+            cvv: cvv
+        }
+
+        try {
+            const response = await fetchWithAuth('http://localhost:8000/api/payments/add-card', {
+                method: 'POST',
+                body: JSON.stringify(paymentCardDetails)
+            });
+            if(!response.ok){
+                const data = await response.json();
+                alert(data.message);
+            }else{
+                const data = await response.json();
+                console.log(data);
+            }
+        } catch (err) {
+            console.log(err);
+        }
+
+        console.log(paymentCardDetails);
+    }
+
+    const date = new Date();
+
+    // Data initialized upon page mount
+    const [paymentCards, setPaymentCards] = useState([]);
+    // User's addresses
+    const [addresses, setAdresses] = useState([]);
+    // User's current pending order
+    const [order, setOrder] = useState({});
+    // User's payment cards
+
     
+    useEffect(() => {
+        const getAddresses = async () => {
+            const response = await fetchWithAuth('http://localhost:8000/api/addresses/');
+            if(!response.ok){
+                console.error("Whoops");
+            }else{
+                const data = await response.json();
+                setAdresses(data);
+            }
+        };
+
+        getAddresses();
+
+    }, []);
+
+    useEffect(() => {
+        const getPaymentCards = async () => {
+            const response = await fetchWithAuth('http://localhost:8000/api/payments/get-payment-cards');
+
+            if(!response.ok){
+                console.error('Whoops');
+            }else{
+                const data = await response.json();
+                setPaymentCards(data);
+            }
+
+        };
+
+        getPaymentCards()
+
+    }, [])
+
+    useEffect(() => {
+        const getCurrentOrder = async () => {
+            const response = await fetchWithAuth('http://localhost:8000/api/orders/get-pending-order');
+
+            if(!response.ok){
+                console.error('Whoops');
+            }else{
+                const data = await response.json();
+                setOrder(data);
+            };
+        };
+
+        getCurrentOrder();
+
+    }, [])
+
+    useEffect(() => {
+        const getCurrentOrderAddress = async () => {
+            try {
+                const response = await fetchWithAuth('http://localhost:8000/api/addresses/get-order-address');
+                if(!response.ok){
+                    console.error("Whoops");
+                }else{
+                    const data = await response.json();
+                    setAddress(data);
+                }
+            }catch(err){
+                console.log(err);
+            }
+        };
+
+        if(!Object.keys(address).length === 0){
+           return;
+        }else{
+            getCurrentOrderAddress();
+        }
+    }, [])
 
     return (
         <div>
+        {/* Address Modal */}
             <div 
                 className={`address-modal-overlay ${isAddressModalOpen ? 'block' : 'hidden'}`}
                 ref={addressModalOverlayRef}
@@ -343,7 +503,7 @@ export default function Checkout(){
                             <div className="flex text-sm justify-between">
                                 <div className="flex flex-col w-[40%]">
                                     <label className="font-semibold block mb-1">City</label>
-                                    <input type="text" className="border border-slate-400 rounded-md py-1 px-2 mb-1" value={city} onChange={handleCityChange}/>
+                                    <input type="text" className="border border-slate-400 rounded-md py-1 px-2" value={city} onChange={handleCityChange}/>
                                     {error.city && (
                                     <p className="text-red-700 text-xs mt-1.5">{error.city}</p>
                                 )}
@@ -369,7 +529,7 @@ export default function Checkout(){
                                     <label className="font-semibold block mb-1">ZIP Code</label>
                                     <input 
                                         type="text" 
-                                        className="border border-slate-400 rounded-md py-1 px-2 mb-1"
+                                        className="border border-slate-400 rounded-md py-1 px-2"
                                         value={zipCode}
                                         onChange={handleZipCodeChange}
                                         />
@@ -398,20 +558,152 @@ export default function Checkout(){
                     </div>
                 </div>
             </div>
+        
+        {/* Payment Modal */}
+        {isPaymentModalOpen && (
+            <div className="payment-modal-overlay flex items-center justify-center">
+                <div className="payment-modal-container flex flex-col text-[13px] rounded-lg">
+                    <div className="border border-b-slate-300 p-3 flex justify-between items-center bg-slate-100 rounded-t-lg">
+                        <h1 className="font-semibold">Add a Credit/Debit card</h1>
+                        <img src={close} alt="" className="h-2.5 cursor-pointer" onClick={closePaymentModal}/>
+                    </div>
+                    <div className="flex bg-white">
+                        <div className="flex flex-col w-[60%] gap-y-2.5 px-6 pt-3 pb-5 border border-e ">
+                            <div className="flex items-center justify-between w-[87%]">
+                                <label className="me-1.5 font-semibold ">Card number</label>
+                                <input 
+                                    type="text" className="border border-slate-400 py-0.5 rounded-sm px-1.5"
+                                    value={cardNumber}
+                                    onChange={handleCardNumberChange}
+                                    />
+                            </div>
+                            <div className="flex items-center justify-between w-[87%]">
+                                <label className="me-1.5 font-semibold">Name on card</label>
+                                <input 
+                                    type="text" className="border border-slate-400 py-0.5 rounded-sm px-1.5"
+                                    value={cardAccountName}
+                                    onChange={handleCardAccountNameChange}
+                                    />
+                            </div>
+                            <div className="flex items-center justify-between w-[87%]">
+                                <label className="me-1.5 font-semibold min-w-[1/2]">Expiration date</label>
+                                <div className="flex w-[47.5%]">
+                                    <select className="border border-slate-400 py-0.5 rounded-sm px-1.5 me-1"
+                                    onChange={handleExpMonthChange}
+                                    value={expMonth}
+                                    >
+                                        {[1,2,3,4,5,6,7,8,9,10,11,12].map((num) => (
+                                            <option 
+                                                key={num} 
+                                                value={num < 10 ? "0" + num : num}>{num < 10 ? "0" + num : num}</option>
+                                        ))}
+                                    </select>
+                                    <select className="border border-slate-400 py-0.5 rounded-sm px-1.5"
+                                    value={expYear}
+                                    onChange={handleExpYearChange}
+                                    >
+                                        {Array(40).fill(date.getFullYear()).map((year, idx) => (
+                                            <option key={idx} value={(year+idx).toString()}>{year + idx}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="flex items-center justify-between w-[87%]">
+                                <label className="me-1.5 font-semibold leading-4">Secrity code (CVV/CVC)</label>
+                                <input 
+                                    type="text" 
+                                    className="border border-slate-400 py-0.5 rounded-sm px-1.5"
+                                    value={cvv}
+                                    onChange={handleCvvChange}
+                                    />
+                            </div>
+                        </div>
+                        <div className="w-[40%] text-[13px] pt-3 px-3.5">
+                            <p>Amazon accepts all major credit and debit cards:</p>
+                            <div className="grid grid-cols-4 gap-x-0 gap-y-0 w-4/5">
+                                <img src={creditCard} alt="" className="h-12"/>
+                                <img src={creditCard} alt="" className="h-12"/>
+                                <img src={creditCard} alt="" className="h-12"/>
+                                <img src={creditCard} alt="" className="h-12"/>
+                                <img src={creditCard} alt="" className="h-12"/>
+                                <img src={creditCard} alt="" className="h-12"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="border border-t-slate-300 py-3 px-4 flex items-center bg-slate-100 rounded-b-lg text-[12px] justify-between">
+                        <div className="w-[75%]">To avoid interruptions to to your service, your added card may be used as backup if another payment method method fails. You can change this setting in Your Payments anytime.</div>
+                        <button 
+                            className="border border-black bg-white px-2 py-1.5 rounded-full font-medium"
+                            onClick={closePaymentModal}
+                            >Cancel</button>
+                        <button 
+                            className="bg-[#FFD815] px-2 py-1.5 rounded-full font-medium"
+                            onClick={addPaymentCard}
+                            >Add your card</button>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* Checkout Page */}
             <div className="checkout-container bg-slate-100">
                 <div className="checkout-content flex justify-between py-3 px-24">
                     <div className="w-[73%] flex flex-col gap-5">
-                        <div className="bg-white p-5 pb-10 flex flex-col gap-3">
-                            <h1 className="text-lg font-bold">Add delivery or pickup address</h1>
-                            <button 
-                                className="bg-[#FFD815] rounded-full text-[13px] p-1.5 px-3.5 w-[30%]"
-                                onClick={handleAddAddressClick}
-                                >Add a new delivery address
-                            </button>
-                            <button className="span rounded-full text-[13px] p-1.5 px-3.5 border border-black w-[30%]">Find a pickup location nearby</button>
+                        <div className="bg-white p-5 pb-10">
+                            {Object.keys(address).length === 0 ? (
+                            <div className="flex flex-col gap-3">
+                                <h1 className="text-lg font-bold">Add delivery or pickup address</h1>
+                                <button 
+                                    className="bg-[#FFD815] rounded-full text-[13px] p-1.5 px-3.5 w-[30%]"
+                                    onClick={handleAddAddressClick}
+                                    >Add a new delivery address
+                                </button>
+                                <button className="span rounded-full text-[13px] p-1.5 px-3.5 border border-black w-[30%]">Find a pickup location nearby</button>
+                                {addresses.length > 0 && (
+                                    <div className="mt-3">
+                                        <h1 className="text-[13px] text-slate-400">Use an already existing address?</h1>
+                                        <div className="flex flex-col">
+                                            {addresses.map((address, idx) => (
+                                                <div key={idx} className="flex text-[13px] text-blue-700">
+                                                    <p className="cursor-pointer">{`${address.building_address}, ${address.street_address}, ${address.state} ${address.zip_code}`}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            ) : (
+                                <div className="flex justify-between text-[13px]">
+                                    <h1 className="text-lg font-bold">Shipping Address</h1>
+                                    <div className="flex flex-col">
+                                        <p>{address.user_name}</p>
+                                        <p>{address.building_address}</p>
+                                        <p>{`${address.street_address}, ${address.state} ${address.zip_code}`}</p>
+                                    </div>
+                                    <a className="text-blue-600 cursor-pointer">Change</a>
+                                </div>
+                            )}
                         </div>
                         <div className="bg-white p-5 flex flex-col gap-3">
                             <h1 className="text-lg font-bold">Payment Method</h1>
+                            <div className="border border-slate-300 p-4">
+                                <h1 className="font-semibold text-lg">Your credit and debit cards</h1>
+                                <hr className="mt-2 border bg-slate-300"/>
+                                <div className="flex flex-col my-2">
+                                    {paymentCards.length > 0 && paymentCards.map((card, idx) => (
+                                        <p key={idx} className="text-blue-600 cursor-pointer text-[13px]">{`${card.name_on_card} - ${card.number.slice(0,4)} **** **** ****`} {card.type}</p>
+                                    ))}
+                                </div>
+                                <div className="flex items-center text-[13px]">
+                                    <img src={pluss} alt="" className="h-4 cursor-pointer" onClick={handleAddPaymentClick}/>
+                                    <img src={creditCard} alt="" className="h-8 ms-1.5"/>
+                                    <a 
+                                        className="text-blue-600 ms-4 me-2 cursor-pointer"
+                                        onClick={handleAddPaymentClick}
+                                        >Add a credit or debit card -</a>
+                                    <p className="text-xs text-slate-400"> Amazon accepts all major credit cards</p>
+                                </div>
+                            </div>
                         </div>
                         <div className="bg-white p-5 flex flex-col gap-3">
                             <h1 className="text-lg font-bold">Review items and shipping</h1>
