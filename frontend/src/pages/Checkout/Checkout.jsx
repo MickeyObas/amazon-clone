@@ -8,9 +8,14 @@ import "react-country-state-city/dist/react-country-state-city.css";
 import states from '../../data/states.json';
 import { AuthContext } from "../../context/AuthContext";
 import { fetchWithAuth } from '../../utils';
-import { json } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 export default function Checkout(){
+    const navigate = useNavigate();
+    const [step, setStep] = useState(
+        JSON.parse(localStorage.getItem('checkoutStep')) || 1
+    );
     const currentDate = new Date(Date.now());
 
     const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
@@ -257,6 +262,8 @@ export default function Checkout(){
                 //localStorage.setItem('address', JSON.stringify(data));
                 //setIsAddressSelected(true);
                 setIsAddressModalOpen(false);
+                setStep(2);
+                localStorage.setItem('checkoutStep', JSON.stringify(2));
             }
 
         } catch (err) {
@@ -317,13 +324,13 @@ export default function Checkout(){
                 alert(data.message);
             }else{
                 const data = await response.json();
-                console.log(data);
+                setPaymentCards((prev) => [...prev, data]);
+                setIsPaymentModalOpen(false);
             }
         } catch (err) {
             console.log(err);
         }
 
-        console.log(paymentCardDetails);
     }
 
     const date = new Date();
@@ -407,6 +414,28 @@ export default function Checkout(){
         }
     }, [])
 
+    // const [isCardSelected, setIsCardSelected] = useState(false);
+    const [selectedCardId, setSelectedCardId] = useState(
+        JSON.parse(localStorage.getItem('cardId')) || null
+    );
+
+    const handlePaymentCardClick = (e, cardId) => {
+        // const card = paymentCards.find((card) => card.id === cardId)
+        // setIsCardSelected(true);
+        console.log(cardId);
+        setSelectedCardId(cardId);
+        localStorage.setItem('cardId', JSON.stringify(cardId));
+        setStep(3);
+        localStorage.setItem('checkoutStep', JSON.stringify(3));
+    }
+
+    let selectedCard = paymentCards.find((card) => card.id === selectedCardId) || null;
+
+    // Stripe-ish
+    const handlePayButtonClick = () => {
+        navigate('/stripe-checkout');
+    };
+
     return (
         <div>
         {/* Address Modal */}
@@ -440,7 +469,7 @@ export default function Checkout(){
                                 <label className="font-semibold block mb-1">Country/Region</label>
                                 <CountrySelect
                                     containerClassName="text-sm country-select"
-                                    inputClassName="country-select-input"
+                                    inputClassName="country-select-input px-2 py-0.5"
                                     onChange={handleCountryChange}
                                 />
                                 {error.country && (
@@ -685,13 +714,21 @@ export default function Checkout(){
                             )}
                         </div>
                         <div className="bg-white p-5 flex flex-col gap-3">
-                            <h1 className="text-lg font-bold">Payment Method</h1>
-                            <div className="border border-slate-300 p-4">
+                            <div className="flex justify-between">
+                                <h1 className="text-lg font-bold">Payment Method</h1>
+                                {selectedCard && (
+                                    <p className="text-[13px]">Debit Card - {selectedCard?.name_on_card} - {selectedCard?.number.slice(0,4)} **** **** ****</p>
+                                )}
+                            </div>
+                            {step === 2 && (
+                                <div className="border border-slate-300 p-4">
                                 <h1 className="font-semibold text-lg">Your credit and debit cards</h1>
                                 <hr className="mt-2 border bg-slate-300"/>
-                                <div className="flex flex-col my-2">
+                                <div className="flex flex-col my-2 gap-y-1.5">
                                     {paymentCards.length > 0 && paymentCards.map((card, idx) => (
-                                        <p key={idx} className="text-blue-600 cursor-pointer text-[13px]">{`${card.name_on_card} - ${card.number.slice(0,4)} **** **** ****`} {card.type}</p>
+                                        <p key={idx} className={`${card.id === selectedCardId ? 'font-bold' : ''} cursor-pointer text-[13px] text-blue-600`}
+                                        onClick={(e) => handlePaymentCardClick(e, card.id)}
+                                        >{`${card.name_on_card} - ${card.number.slice(0,4)} **** **** ****`} {card.type}</p>
                                     ))}
                                 </div>
                                 <div className="flex items-center text-[13px]">
@@ -704,9 +741,28 @@ export default function Checkout(){
                                     <p className="text-xs text-slate-400"> Amazon accepts all major credit cards</p>
                                 </div>
                             </div>
+                            )}
                         </div>
                         <div className="bg-white p-5 flex flex-col gap-3">
                             <h1 className="text-lg font-bold">Review items and shipping</h1>
+                            {step === 3 && (
+                                <div className="flex flex-col px-5">
+                                {cart && cart.items.map((item, idx) => (
+                                    <div key={idx} className="flex justify-between items-center text-[13px] py-1.5">
+                                        <h3>x<span className="font-medium ms-0.5 text-sm">{item.quantity}</span></h3>
+                                        <div className="w-1/5 flex justify-center">
+                                            <img src={item.product.picture} alt="" className="h-28"/>
+                                        </div>
+                                        <h2 className="font-medium checkout-product-title w-[48%]">{item.product.title}</h2>
+                                        <h2 className="font-medium">${item.product.price}</h2>
+                                    </div>
+                                ))}
+                                <button
+                                className="bg-[#FFD815] text-[13px] py-1 px-10 my-3 rounded-full self-start ms-auto me-auto"
+                                onClick={handlePayButtonClick}
+                                >Pay</button>
+                            </div>
+                            )}
                         </div>
                         <div className="bg-white p-5 flex flex-col gap-3 text-xs">
                             <p>Why has sales tax been applied? See <span className="text-blue-700">blah, blah, and blah.</span></p>

@@ -23,7 +23,7 @@ export default function Header(){
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const navigate = useNavigate();
-    const { cart } = useCart();
+    const { cart, settCart } = useCart();
 
     const { selectedCategory, setSelectedCategory } = useCategory();    
 
@@ -61,6 +61,21 @@ export default function Header(){
 
         fetchCategories();
     }, []);
+
+    useEffect(() => {
+        const fetchCart = async () => {
+            const response = await fetchWithAuth('http://localhost:8000/api/cart/');
+            if(!response.ok){
+                console.log("Whoops, cart fetch go bad, brr!");
+            }else{
+                const data = await response.json();
+                settCart(data);
+            }
+        };
+
+        fetchCart();
+
+    }, [])
 
     const handleCategorySelect = (e) => {
         const categoryId = (e.target.value);

@@ -98,6 +98,16 @@ body, .fancy-line:after {
   line-height: 1.5em;
 }
 
+
+.checkout-product-title{
+  -webkit-box-orient: vertical;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 1;
+  line-height: 1.5em;
+}
+
 .address-modal-overlay{
   position: fixed;
   z-index: 1000;
@@ -136,7 +146,6 @@ body, .fancy-line:after {
 
 .country-select-input{
   border: 0 !important ;
-  padding: 0px !important;
 }
 
 .country-select{

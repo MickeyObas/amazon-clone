@@ -9,6 +9,7 @@ class PaymentCardSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentCard
         fields = [
+            'id',
             'user',
             'type',
             'number',

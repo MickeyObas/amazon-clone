@@ -15,6 +15,9 @@ import { CategoryProvider } from './context/CategoryContext.jsx';
 import { CartProvider } from './context/CartContext.jsx';
 import Cart from './pages/Cart/Cart.jsx';
 import Checkout from './pages/Checkout/Checkout.jsx';
+import StripeCheckoutForm from './components/StripeCheckoutForm.jsx';
+import StripeCheckout from './components/StripeCheckout.jsx';
+import StripeComplete from './components/StripeComplete.jsx';
 
 
 export default function App() {
@@ -32,6 +35,8 @@ export default function App() {
               <Route path='cart/' element={<Cart />} />
               <Route path='checkout/' element={<Checkout />} />
               <Route path='product/:id' element={<Product />} />
+              <Route path='stripe-checkout' element={<StripeCheckout />} />
+              <Route path='stripe-complete' element={<StripeComplete />} />
             </Route>
           </Route>
 
