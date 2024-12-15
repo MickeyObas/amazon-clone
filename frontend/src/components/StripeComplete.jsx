@@ -1,8 +1,45 @@
 import { useNavigate } from "react-router-dom";
 import { AmazonLogo, AmazonLogoBlack } from "../assets/images/images";
+import { useCart } from "../context/CartContext";
+import { fetchWithAuth } from "../utils";
+import { useEffect } from "react";
+
 
 export default function StripeComplete(){
+    const { cart } = useCart();
     const navigate = useNavigate();
+    const currentDate = new Date(Date.now());
+
+    const handleContinueButtonClick = async () => {
+        const response = await fetchWithAuth('http://localhost:8000/api/cart/clear-cart', {
+            method: 'POST'
+        });
+        if(!response.ok){
+            console.log("Whoops");
+            return;
+        }else{
+            const data = await response.json();
+            localStorage.removeItem('cart');
+            localStorage.removeItem('checkoutStep');
+            navigate('/');
+        }
+        
+    }
+
+    useEffect(() => {
+        const setOrderSuccess = async () => {
+            const response = await fetchWithAuth('http://localhost:8000/api/orders/order-status-change', {
+                method: 'PATCH',
+                body: JSON.stringify({
+                    type: 'to-processing'
+                })
+            })
+        };
+
+        setOrderSuccess();
+
+    }, [])
+
     return (
         <div className="flex flex-col items-center justify-center h-screen ">
             {/* Success Icon */}
@@ -24,16 +61,20 @@ export default function StripeComplete(){
                     Order Summary
                 </h2>
                 <div className="mt-4 flex justify-between text-gray-600">
-                    <span>Order Number:</span>
+                    <span>Order ID:</span>
                     <span>#123456789</span>
                 </div>
                 <div className="mt-2 flex justify-between text-gray-600">
                     <span>Date:</span>
-                    <span>Dec 14, 2024</span>
+                    <span>{currentDate.toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric',
+                    })}</span>
                 </div>
                 <div className="mt-2 flex justify-between text-gray-600">
                     <span>Total Amount:</span>
-                    <span>$100.00</span>
+                    <span>${cart.total_price}</span>
                 </div>
             </div>
 
@@ -41,7 +82,7 @@ export default function StripeComplete(){
             <div className="mt-6">
                 <button
                     className="px-6 py-3 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-500 focus:outline-none"
-                    onClick={() => navigate('/')}
+                    onClick={handleContinueButtonClick}
                 >
                     Continue Shopping
                 </button>

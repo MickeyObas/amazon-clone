@@ -85,4 +85,9 @@ def delete_from_cart(request, item_id):
     })
 
 
-    
+@api_view(['POST'])
+def clear_cart(request):
+    cart_object = Cart.objects.get(user=request.user)
+    cart_object.items.all().delete()
+    cart_object.save()
+    return Response({'status': 'Cart cleared successful.'})

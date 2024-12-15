@@ -8,7 +8,7 @@ import "react-country-state-city/dist/react-country-state-city.css";
 import states from '../../data/states.json';
 import { AuthContext } from "../../context/AuthContext";
 import { fetchWithAuth } from '../../utils';
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 
 
 export default function Checkout(){
@@ -432,8 +432,27 @@ export default function Checkout(){
     let selectedCard = paymentCards.find((card) => card.id === selectedCardId) || null;
 
     // Stripe-ish
-    const handlePayButtonClick = () => {
-        navigate('/stripe-checkout');
+    const handlePayButtonClick = async () => {
+        if(!order){
+            console.log("Order not in existence or recognition yet")
+            return;
+        }
+        // Create OrderItems from Cart
+        const response = await fetchWithAuth('http://localhost:8000/api/orders/generate-order-items', {
+            method: 'POST',
+            body: JSON.stringify({
+                cart: cart
+            })
+        })
+
+        if(!response.ok){
+            console.log("Whoops, something went wrong");
+        }else{
+            const data = await response.json();
+            console.log(data);
+            navigate('/stripe-checkout');
+        }
+        
     };
 
     return (
@@ -713,7 +732,8 @@ export default function Checkout(){
                                 </div>
                             )}
                         </div>
-                        <div className="bg-white p-5 flex flex-col gap-3">
+                        {/* Payment Tab */}
+                        {/* <div className="bg-white p-5 flex flex-col gap-3">
                             <div className="flex justify-between">
                                 <h1 className="text-lg font-bold">Payment Method</h1>
                                 {selectedCard && (
@@ -742,10 +762,10 @@ export default function Checkout(){
                                 </div>
                             </div>
                             )}
-                        </div>
+                        </div> */}
                         <div className="bg-white p-5 flex flex-col gap-3">
                             <h1 className="text-lg font-bold">Review items and shipping</h1>
-                            {step === 3 && (
+                            {step === 2 && (
                                 <div className="flex flex-col px-5">
                                 {cart && cart.items.map((item, idx) => (
                                     <div key={idx} className="flex justify-between items-center text-[13px] py-1.5">
@@ -778,7 +798,7 @@ export default function Checkout(){
                             <hr className="mt-2 mb-4"/>
                             <div className="flex flex-col gap-1 text-xs">
                                 <div className="flex justify-between">
-                                    <div>Items ({cart.total_quantity}):</div>
+                                    <div>Items ({cart?.total_quantity}):</div>
                                     <div>--</div>
                                 </div>
                                 <div className="flex justify-between">
@@ -792,7 +812,7 @@ export default function Checkout(){
                             </div>
                             <div className="flex justify-between mt-1.5 font-bold">
                                 <h1>Order total:</h1>
-                                <h1>${cart.total_price}</h1>
+                                <h1>${cart?.total_price}</h1>
                             </div>
                         </div>      
                     </div>

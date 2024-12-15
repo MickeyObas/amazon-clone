@@ -70,6 +70,7 @@ export default function Header(){
             }else{
                 const data = await response.json();
                 settCart(data);
+                localStorage.setItem('cart', JSON.stringify(data))
             }
         };
 

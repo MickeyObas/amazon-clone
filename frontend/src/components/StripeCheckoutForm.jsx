@@ -43,6 +43,7 @@ export default function StripeCheckoutForm() {
       }
   
       setIsLoading(false);
+
     };
   
     const paymentElementOptions = {
