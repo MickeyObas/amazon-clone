@@ -1,54 +1,55 @@
-from rest_framework import status, serializers
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
-from products.models import Product
-from carts.models import Cart, CartItem
-from .serializers import CartSerializer, CartItemSerializer
-
 import json
 
+from rest_framework import serializers, status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
-@api_view(['GET'])
+from carts.models import Cart, CartItem
+from products.models import Product
+
+from .serializers import CartItemSerializer, CartSerializer
+
+
+@api_view(["GET"])
 def cart(request):
     try:
-        cart = Cart.objects.get(
-            user=request.user
-        )
+        cart = Cart.objects.get(user=request.user)
     except Cart.DoesNotExist:
-        return Response({'error': 'User cart does not exist'})
-    
-    serializer = CartSerializer(cart, context={'request': request})
+        return Response({"error": "User cart does not exist"})
+
+    serializer = CartSerializer(cart, context={"request": request})
 
     return Response(serializer.data)
 
 
-@api_view(['PATCH'])
+@api_view(["PATCH"])
 def update_cart(request, item_id):
     cart_item = CartItem.objects.get(id=item_id)
     cart = cart_item.cart
-    quantity = json.loads(request.body)['quantity']
+    quantity = json.loads(request.body)["quantity"]
     if quantity is not None and quantity > 0:
         cart_item.quantity = quantity
         cart_item.save()
-        return Response({
-            'status': 'Item quantity updated',
-            'total_quantity': cart.get_total_quantity(),
-            'total_price': cart.get_total_price()
-        })
-    return Response({'error': 'Invalid Quantity'}, status=status.HTTP_400_BAD_REQUEST)
-    
+        return Response(
+            {
+                "status": "Item quantity updated",
+                "total_quantity": cart.get_total_quantity(),
+                "total_price": cart.get_total_price(),
+            }
+        )
+    return Response({"error": "Invalid Quantity"}, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
 def add_to_cart(request, product_id):
     try:
         product = Product.objects.get(id=product_id)
     except Product.DoesNotExist:
-        return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
-    
-    cart, created = Cart.objects.get_or_create(
-        user=request.user
-    )
+        return Response(
+            {"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND
+        )
+
+    cart, created = Cart.objects.get_or_create(user=request.user)
 
     cart_item, created = CartItem.objects.get_or_create(
         cart=cart,
@@ -59,35 +60,36 @@ def add_to_cart(request, product_id):
         cart_item.quantity += 1
         cart_item.save()
     else:
-        quantity = json.loads(request.body)['quantity']
+        quantity = json.loads(request.body)["quantity"]
         cart_item.quantity = quantity
         cart_item.save()
 
-    return Response({
-        'message': 'Item added to cart successfully',
-        'cart': CartSerializer(cart).data,
-        'cart_item': {
-            'id': cart_item.id,
-            'quantity': cart_item.quantity
+    return Response(
+        {
+            "message": "Item added to cart successfully",
+            "cart": CartSerializer(cart).data,
+            "cart_item": {"id": cart_item.id, "quantity": cart_item.quantity},
         }
-    })
-    
+    )
 
-@api_view(['DELETE'])
+
+@api_view(["DELETE"])
 def delete_from_cart(request, item_id):
     cart_item = CartItem.objects.get(id=item_id)
     cart = cart_item.cart
     cart_item.delete()
-    return Response({
-        'status': 'Item deleted from cart successfully',
-        'total_quantity': cart.get_total_quantity(),
-        'total_price': cart.get_total_price()
-    })
+    return Response(
+        {
+            "status": "Item deleted from cart successfully",
+            "total_quantity": cart.get_total_quantity(),
+            "total_price": cart.get_total_price(),
+        }
+    )
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def clear_cart(request):
     cart_object = Cart.objects.get(user=request.user)
     cart_object.items.all().delete()
     cart_object.save()
-    return Response({'status': 'Cart cleared successful.'})
+    return Response({"status": "Cart cleared successful."})

@@ -1,12 +1,11 @@
 from django.contrib import admin
 
-from .models import (
-    Order,
-    OrderItem
-)
+from .models import Order, OrderItem
+
 
 class OrderModelAdmin(admin.ModelAdmin):
     pass
+
 
 class OrderItemModelAdmin(admin.ModelAdmin):
     pass

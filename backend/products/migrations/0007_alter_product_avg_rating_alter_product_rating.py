@@ -6,18 +6,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0006_alter_productattributevalue_product_and_more'),
+        ("products", "0006_alter_productattributevalue_product_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='product',
-            name='avg_rating',
-            field=models.DecimalField(blank=True, decimal_places=1, default=0.0, max_digits=2, null=True),
+            model_name="product",
+            name="avg_rating",
+            field=models.DecimalField(
+                blank=True, decimal_places=1, default=0.0, max_digits=2, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='rating',
-            field=models.DecimalField(blank=True, decimal_places=1, max_digits=3, null=True),
+            model_name="product",
+            name="rating",
+            field=models.DecimalField(
+                blank=True, decimal_places=1, max_digits=3, null=True
+            ),
         ),
     ]

@@ -20,8 +20,8 @@ export default function Login(){
     const [currentStep, setCurrentStep] = useState(1);
     const [phoneOrEmail, setPhoneOrEmail] = useState('');
     const [password, setPassword] = useState('');
-
     const navigate = useNavigate();
+
 
     const handlePhoneOrEmailSubmit = (submittedPhoneOrEmail) => {
         setPhoneOrEmail(submittedPhoneOrEmail);
@@ -70,6 +70,7 @@ function StepOne({onSubmit}){
     const [mobileNumberOrEmail, setMobileNumberOrEmail] = useState('');
     const [error, setError] = useState('');
     const [userError, setUserError] = useState('');
+    const navigate = useNavigate();
 
     const handleContinueClick = async (e) => {
         e.preventDefault();
@@ -154,7 +155,9 @@ function StepOne({onSubmit}){
                 <a href="" className='text-blue-800 text-sm'>Shop on Amazon Business</a>
             </form>
             <div className='divider w-full text-xs max-w-[350px] text-gray-500 mb-3'>New to Amazon?</div>
-            <button className='text-[13px] font-medium border border-gray-300 rounded-md w-[350px] py-[4.5px] mb-5 shadow-md hover:bg-slate-50'>Create your Amazon account</button>
+            <button 
+              onClick={() => navigate('/register')}
+              className='text-[13px] font-medium border border-gray-300 rounded-md w-[350px] py-[4.5px] mb-5 shadow-md hover:bg-slate-50'>Create your Amazon account</button>
             <div className='fancy-line w-full'></div>
                 <div className='flex flex-col content-center items-center mt-7'>
                     <div className='flex gap-7'>

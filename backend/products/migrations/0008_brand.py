@@ -6,17 +6,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0007_alter_product_avg_rating_alter_product_rating'),
+        ("products", "0007_alter_product_avg_rating_alter_product_rating"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Brand',
+            name="Brand",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
-                ('logo', models.ImageField(blank=True, null=True, upload_to='brands/')),
-                ('website', models.URLField(blank=True, null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=255)),
+                ("logo", models.ImageField(blank=True, null=True, upload_to="brands/")),
+                ("website", models.URLField(blank=True, null=True)),
             ],
         ),
     ]

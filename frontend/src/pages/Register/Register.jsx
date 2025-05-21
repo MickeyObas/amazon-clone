@@ -245,7 +245,7 @@ export default function Register(){
                 <p className='text-sm font-semibold'>Buying for work?</p>
                 <a className='text-sm text-blue-800 block mb-3'>Create a free business account</a>
                 <div className='fancy-line'></div>
-                <p className='text-sm font-normal mt-7'>Already have an account? <a href='' className='text-blue-800'>Sign in</a></p>
+                <p className='text-sm font-normal mt-7'>Already have an account? <a href='/login' className='text-blue-800'>Sign in</a></p>
             </form>
                 <div className='fancy-line w-full'></div>
                 <div className='flex flex-col content-center items-center mt-7'>

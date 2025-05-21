@@ -223,7 +223,7 @@ export default function Footer(){
                         <a href="">Consumer Health Data Privacy Disclosure</a>
                         <a href="">Your Ads Privacy Choices</a>
                     </div>
-                    <div className='copyright mt-1'>&copy; 1996-2024, Amazon.com, Inc. or its affiliates</div>
+                    <div className='copyright mt-1'>&copy; 1996-2025, Amazon Clone, MickeyTheBrave</div>
                 </div>
             </div>
         </footer>

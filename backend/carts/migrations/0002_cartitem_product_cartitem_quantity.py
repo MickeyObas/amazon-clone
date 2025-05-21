@@ -7,20 +7,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('carts', '0001_initial'),
-        ('products', '0010_alter_product_quantity_in_stock'),
+        ("carts", "0001_initial"),
+        ("products", "0010_alter_product_quantity_in_stock"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cartitem',
-            name='product',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='products.product'),
+            model_name="cartitem",
+            name="product",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="products.product",
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='cartitem',
-            name='quantity',
+            model_name="cartitem",
+            name="quantity",
             field=models.PositiveSmallIntegerField(default=1),
         ),
     ]

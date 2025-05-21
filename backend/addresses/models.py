@@ -1,5 +1,5 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
 
 
 class Address(models.Model):
@@ -18,4 +18,3 @@ class Address(models.Model):
 
     def __str__(self):
         return f"{self.user.first_name}'s address"
-

@@ -7,18 +7,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('categories', '0003_delete_productattributevalue'),
-        ('products', '0004_alter_product_picture_producthighlight'),
+        ("categories", "0003_delete_productattributevalue"),
+        ("products", "0004_alter_product_picture_producthighlight"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductAttributeValue',
+            name="ProductAttributeValue",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('value', models.TextField()),
-                ('attribute', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='categories.categoryattribute')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.product')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("value", models.TextField()),
+                (
+                    "attribute",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="categories.categoryattribute",
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="products.product",
+                    ),
+                ),
             ],
         ),
     ]

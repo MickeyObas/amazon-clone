@@ -1,5 +1,7 @@
 from django.core.management import BaseCommand
+
 from ...models import Category
+
 
 class Command(BaseCommand):
     help = "Add subcatgories to the database"
@@ -14,7 +16,6 @@ class Command(BaseCommand):
     """
 
     def handle(self, *args, **kwargs):
-
 
         main_sub_category_map = {
             # Main ==> Sub
@@ -31,7 +32,7 @@ class Command(BaseCommand):
                 "Scrapbooking & Stamping",
                 "Sewing",
                 "Party Decorations & Supplies",
-                "Gift Wrapping Supplies"
+                "Gift Wrapping Supplies",
             ],
             "Automotive": [
                 "Car Care",
@@ -48,7 +49,7 @@ class Command(BaseCommand):
                 "Tires & Wheels",
                 "Tools & Equipment",
                 "Automotive Enthusiast Merchandise",
-                "Heavy Duty and Commercial Vehicle Equipment"
+                "Heavy Duty and Commercial Vehicle Equipment",
             ],
             "Baby": [
                 "Activity & Environment",
@@ -67,7 +68,7 @@ class Command(BaseCommand):
                 "Pregnancy & Maternity",
                 "Safety",
                 "Strollers & Accessories",
-                "Travel Gear"
+                "Travel Gear",
             ],
             "Beauty and Personal Care": [
                 "Makeup",
@@ -78,7 +79,7 @@ class Command(BaseCommand):
                 "Tools & Accessories",
                 "Shave & Hair Removal",
                 "Personal Care",
-                "Oral Care"
+                "Oral Care",
             ],
             "Womens' Fashion": [
                 "Clothing",
@@ -86,21 +87,16 @@ class Command(BaseCommand):
                 "Jewelry",
                 "Watches",
                 "Handbags",
-                "Accessories"
+                "Accessories",
             ],
-            "Men's Fashion": [
-                "Clothing",
-                "Shoes",
-                "Watches",
-                "Accessories"
-            ],
+            "Men's Fashion": ["Clothing", "Shoes", "Watches", "Accessories"],
             "Boys' Fashion": [
                 "Clothing",
                 "Shoes",
                 "Jewelry",
                 "Watches",
                 "Accessories",
-                "School Uniforms"
+                "School Uniforms",
             ],
             "Health and Household": [
                 "Baby & Child Care",
@@ -114,7 +110,7 @@ class Command(BaseCommand):
                 "Stationery & Gift Wrapping Supplies",
                 "Vision Care",
                 "Vitamins & Dietary Supplements",
-                "Wellness & Relaxation"
+                "Wellness & Relaxation",
             ],
             "Home and Kitchen": [
                 "Kids' Home Store",
@@ -131,7 +127,7 @@ class Command(BaseCommand):
                 "Irons & Steamers",
                 "Vacuums & Floor Care",
                 "Storage & Organization",
-                "Cleaning Supplies"
+                "Cleaning Supplies",
             ],
             "Industrial & Scientific": [
                 "Abrasive & Finishing Products",
@@ -154,11 +150,10 @@ class Command(BaseCommand):
                 "Professional Dental Supplies",
                 "Professional Medical Supplies",
                 "Raw Materials",
-                "Retail Store Fixtures & Equipment"
-                "Robotics",
+                "Retail Store Fixtures & Equipment" "Robotics",
                 "Science Education",
                 "Tapes, Adhesive & Sealants",
-                "Test, Measure & Inspect"
+                "Test, Measure & Inspect",
             ],
             "Luggage": [
                 "Carry-ons",
@@ -172,7 +167,7 @@ class Command(BaseCommand):
                 "Messenger Bags",
                 "Umbrellas",
                 "Duffles",
-                "Travel Accessories"
+                "Travel Accessories",
             ],
             "Movies & Television": [
                 "Movies",
@@ -194,7 +189,7 @@ class Command(BaseCommand):
                 "Birds",
                 "Horses",
                 "Reptiles & Amphibians",
-                "Small Animals"
+                "Small Animals",
             ],
             "Software": [
                 "Accouting & Finance",
@@ -213,12 +208,12 @@ class Command(BaseCommand):
                 "Programming & Web Development",
                 "Tax Preparation",
                 "Utilities",
-                "Video"
+                "Video",
             ],
             "Sports & Outdoors": [
                 "Sports & Outodoors",
                 "Outdoor Recreation",
-                "Sports & Fitness"
+                "Sports & Fitness",
             ],
             "Tools & Home Improvement": [
                 "Tools and Home Improvement",
@@ -235,7 +230,7 @@ class Command(BaseCommand):
                 "Rough Plumbing",
                 "Safety & Security",
                 "Storage & Home Organization",
-                "Welding & Soldering"
+                "Welding & Soldering",
             ],
             "Toys and Games": [
                 "Action Figures & Statues",
@@ -258,7 +253,7 @@ class Command(BaseCommand):
                 "Stuffed Animals & Plush Toys",
                 "Toy Remote Control & Play Vehicles",
                 "Tricycles, Scooters & Wagons",
-                "Video Games"
+                "Video Games",
             ],
             "Video Games": [
                 "Video Games",
@@ -278,25 +273,21 @@ class Command(BaseCommand):
                 "Retro Gaming & Microconsoles",
                 "Accessories",
                 "Digital Games",
-                "Kids & Family"
+                "Kids & Family",
             ],
         }
-
 
         try:
             for key, value in main_sub_category_map.items():
                 parent_category, created = Category.objects.get_or_create(
-                    title=key,
-                    parent=None
-                    )
+                    title=key, parent=None
+                )
                 for sub_value in value:
                     Category.objects.get_or_create(
                         title=sub_value,
                         parent_id=parent_category.id,
-                        )
-            self.stdout.write(self.style.SUCCESS('Categories added successfully'))
+                    )
+            self.stdout.write(self.style.SUCCESS("Categories added successfully"))
         except Exception as e:
             print(e)
             print(key, value, parent_category, sep="\n\n")
-        
-        

@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0002_alter_productimage_product'),
+        ("products", "0002_alter_productimage_product"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='avg_rating',
+            model_name="product",
+            name="avg_rating",
             field=models.DecimalField(decimal_places=1, default=0.0, max_digits=2),
         ),
         migrations.AddField(
-            model_name='product',
-            name='rating_count',
+            model_name="product",
+            name="rating_count",
             field=models.PositiveIntegerField(default=0),
         ),
     ]

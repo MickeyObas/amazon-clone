@@ -1,4 +1,5 @@
 from django.core.management import BaseCommand
+
 from ...models import Category, CategoryAttribute
 
 
@@ -11,7 +12,7 @@ class Command(BaseCommand):
                 "Color",
                 "Fabric",
                 "Care Instructions",
-                "Country of Origin"
+                "Country of Origin",
             ]
         }
 
@@ -20,10 +21,8 @@ class Command(BaseCommand):
                 category = Category.objects.get(title=key)
                 for attr in value:
                     CategoryAttribute.objects.create(
-                        title=attr,
-                        category_id=category.id
+                        title=attr, category_id=category.id
                     )
             self.stdout.write(self.style.SUCCESS("Attributes added successfully!"))
         except Exception as e:
             self.stderr.write(e)
-           

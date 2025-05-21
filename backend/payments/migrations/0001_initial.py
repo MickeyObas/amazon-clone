@@ -15,15 +15,36 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='PaymentCard',
+            name="PaymentCard",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('number', models.CharField(max_length=28)),
-                ('type', models.CharField(choices=[('CREDIT', 'Credit'), ('DEBIT', 'Debit')], default='DEBIT', max_length=10)),
-                ('name_on_card', models.CharField(max_length=255)),
-                ('cvv', models.CharField(max_length=3)),
-                ('expiration_date', models.DateField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("number", models.CharField(max_length=28)),
+                (
+                    "type",
+                    models.CharField(
+                        choices=[("CREDIT", "Credit"), ("DEBIT", "Debit")],
+                        default="DEBIT",
+                        max_length=10,
+                    ),
+                ),
+                ("name_on_card", models.CharField(max_length=255)),
+                ("cvv", models.CharField(max_length=3)),
+                ("expiration_date", models.DateField()),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

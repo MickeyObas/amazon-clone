@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('carts', '0005_cartitem_created'),
+        ("carts", "0005_cartitem_created"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='cartitem',
-            options={'ordering': ['-created']},
+            name="cartitem",
+            options={"ordering": ["-created"]},
         ),
     ]

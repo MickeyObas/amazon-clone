@@ -1,7 +1,7 @@
-from django.db import models
-from django.core.exceptions import ValidationError
-from django.utils import timezone
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core.exceptions import ValidationError
+from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from .managers import CustomUserManager
@@ -24,7 +24,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def clean(self):
         if not self.email and not self.phone_number:
-            raise ValidationError('You must provide an email address or a mobile number')
+            raise ValidationError(
+                "You must provide an email address or a mobile number"
+            )
 
     def save(self, *args, **kwargs):
         self.clean()

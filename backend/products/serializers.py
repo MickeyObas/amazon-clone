@@ -1,34 +1,26 @@
 from rest_framework import serializers
 
-from .models import (
-    Brand,
-    Product,
-    ProductHighlight,
-    ProductAttributeValue
-)
-
 from categories.serializers import CategorySerializer
+
+from .models import Brand, Product, ProductAttributeValue, ProductHighlight
+
 
 class ProductAttributesSerializer(serializers.ModelSerializer):
     attribute = serializers.SerializerMethodField()
 
     class Meta:
         model = ProductAttributeValue
-        fields = [
-            "attribute",
-            "value"
-        ]
+        fields = ["attribute", "value"]
 
     def get_attribute(self, obj):
         return obj.attribute.title
 
+
 class ProductHighlightSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductHighlight
-        fields = [
-            "title",
-            "description"
-        ]
+        fields = ["title", "description"]
+
 
 class ProductSerializer(serializers.ModelSerializer):
     brand = serializers.SerializerMethodField(read_only=True)
@@ -42,14 +34,14 @@ class ProductSerializer(serializers.ModelSerializer):
         return obj.brand.title if obj.brand else None
 
     def get_picture(self, obj):
-        request = self.context.get('request')
+        request = self.context.get("request")
         if request and obj.picture:
             return request.build_absolute_uri(obj.picture.url)
         return None
-    
+
     def get_star_ratings(self, obj):
         return obj.get_star_ratings()
-    
+
     class Meta:
         model = Product
         fields = [
@@ -67,15 +59,11 @@ class ProductSerializer(serializers.ModelSerializer):
             "extra_attributes",
             "category",
             "highlights",
-            "star_ratings"
+            "star_ratings",
         ]
 
 
 class BrandSerializer(serializers.ModelSerializer):
     class Meta:
         model = Brand
-        fields = [
-            'title',
-            'logo',
-            'website'
-        ]
+        fields = ["title", "logo", "website"]

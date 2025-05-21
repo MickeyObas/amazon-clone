@@ -7,18 +7,22 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('categories', '0003_delete_productattributevalue'),
-        ('products', '0005_productattributevalue'),
+        ("categories", "0003_delete_productattributevalue"),
+        ("products", "0005_productattributevalue"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='productattributevalue',
-            name='product',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='attributes', to='products.product'),
+            model_name="productattributevalue",
+            name="product",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="attributes",
+                to="products.product",
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='productattributevalue',
-            unique_together={('product', 'attribute')},
+            name="productattributevalue",
+            unique_together={("product", "attribute")},
         ),
     ]
